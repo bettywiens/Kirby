@@ -9,6 +9,7 @@ class KeyHandler
   boolean a_pressed;
   boolean s_pressed;
   boolean d_pressed;
+  boolean o_pressed;
 
   KeyHandler()
   {
@@ -53,6 +54,10 @@ class KeyHandler
     {
       d_pressed = true;
     }
+    if (key == 'o')
+    {
+      o_pressed = true;
+    }
   }
 
   void released()
@@ -92,6 +97,10 @@ class KeyHandler
     if (key == 'd')
     {
       d_pressed = false;
+    }
+    if (key == 'o')
+    {
+      o_pressed = false;
     }
   }
 }
