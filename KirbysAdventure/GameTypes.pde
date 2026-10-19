@@ -1,0 +1,4 @@
+enum GameTypes
+{
+  KIRBY, ENEMY, KIRBY_HEALTH, ENEMY_HEALTH, STAR
+}
