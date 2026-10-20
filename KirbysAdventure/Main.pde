@@ -15,9 +15,15 @@ int ENERGY_BALL_SPEED = 5;
 
 float kirby_x;
 float kirby_y;
+
+float kirby_size;
+float energy_ball_size;
 float lower_border;
 
-ArrayList<GameObject> game_objects; 
+ArrayList<GameObject> game_objects;
+
+NormalImage energy_ball_image = new NormalImage("enemy/flying_1.png");
+NormalImage kirby_image = new NormalImage("kirby/flying.png");
 
 KeyHandler key_handler;
 Background sky_background;
@@ -30,19 +36,20 @@ void setup()
 {
   size(800, 600);
   key_handler = new KeyHandler();
-  
+
   sky_background = new Background();
   lower_border = height - sky_background.stats_bar_height;
-  
+
   // Game Objects:
   game_objects = new ArrayList<GameObject>();
-  
+
   // Timer:
   timer = new Timer(10); // Neuer Timer für 2s oder 2000ms
   timer.start();
 
   // Kirby:
   kirby = new Kirby(100, 200, 15);
+  kirby_size = kirby_image.image_height;
   game_objects.add(kirby);
   kirby_x = kirby.pixel_x;
   kirby_y = kirby.pixel_y;
@@ -52,6 +59,7 @@ void setup()
 
   // Energy Ball:
   energy_ball = new EnergyBall (600, 200, ENERGY_BALL_SPEED);
+  energy_ball_size = energy_ball_image.image_height;
   game_objects.add(energy_ball);
 }
 
@@ -81,11 +89,9 @@ void updateKirby()
 void keyPressed()
 {
   key_handler.pressed();
-  
 }
 
 void keyReleased()
 {
   key_handler.released();
-  
 }

@@ -3,7 +3,7 @@ class EnergyBall extends Character
   AnimationImage flying;
   NormalImage flying_image;
   float flying_height;
-  
+
   int direction_counter;
   String directions_path = "C:/Users/bwiens/Documents/GitHub/Kirby/KirbysAdventure/data/enemy/directions/energy_ball_directions.txt";
   String directions_string;
@@ -11,10 +11,10 @@ class EnergyBall extends Character
 
   EnergyBall(float pixel_x, float pixel_y, float speed)
   {
-    super(GameTypes.ENEMY, pixel_x, pixel_y, speed);
+    super(GameTypes.ENEMY, pixel_x, pixel_y, speed, energy_ball_size);
 
     flying = new AnimationImage("enemy/flying", 4, ENERGY_BALL_ANIMATION_SPEED);
-    
+
     flying_image = new NormalImage("enemy/flying_1.png");
 
     this.flying_height = flying_image.image_height;
@@ -27,7 +27,8 @@ class EnergyBall extends Character
     try
     {
       directions_string = Files.readString(Path.of(directions_path));
-    } catch (IOException e)
+    }
+    catch (IOException e)
     {
       println("File not found");
     }
@@ -37,7 +38,7 @@ class EnergyBall extends Character
 
   @Override
     void move()
-  {    
+  {
 
     // Wenn Timer vorbei ist bewegt sich EnergyBall abhängig von der direction nach oben oder unten
     if (timer.isFinished())
@@ -57,6 +58,19 @@ class EnergyBall extends Character
         }
         timer.start();
         direction_counter++;
+      }
+    }
+  }
+
+  void checkCollision()
+  {
+    CollisionResult collision_result = checkCollision();
+
+    if (collision_result != null)
+    {
+      if (collision_result.type.equals(GameTypes.KIRBY_STAR))
+      {
+        println("collided :))");
       }
     }
   }

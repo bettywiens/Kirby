@@ -1,7 +1,7 @@
 class Kirby extends Character
 {
   NormalImage flying;
-
+  
   AnimationImage shooting;
 
   float flying_height; // Höhe des Bildes
@@ -11,7 +11,7 @@ class Kirby extends Character
 
   Kirby(float pixel_x, float pixel_y, float speed)
   {
-    super(GameTypes.KIRBY, pixel_x, pixel_y, speed);
+    super(GameTypes.KIRBY, pixel_x, pixel_y, speed, kirby_size);
 
     flying = new NormalImage("kirby/flying.png");
 

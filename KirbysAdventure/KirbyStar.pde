@@ -2,11 +2,12 @@ class KirbyStar extends Star
 {
   
   AnimationImage star;
+  NormalImage star = new NormalImage("star/kirby/star_1.png");
   
   
   KirbyStar(float pixel_x, float pixel_y, float speed)
   {
-    super(GameTypes.KIRBY_STAR, pixel_x, pixel_y, speed);
+    super(GameTypes.KIRBY_STAR, pixel_x, pixel_y, speed, star.image_height);
     
     kirby_x = pixel_x;
     kirby_y = pixel_y;
