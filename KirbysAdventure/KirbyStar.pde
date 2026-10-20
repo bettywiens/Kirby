@@ -1,8 +1,8 @@
 class KirbyStar extends Star
 {
   
-  NormalImage star;
-  String star_path = "star/kirby/star_1.png";
+  AnimationImage star;
+  
   
   KirbyStar(float pixel_x, float pixel_y, float speed)
   {
@@ -11,7 +11,7 @@ class KirbyStar extends Star
     kirby_x = pixel_x;
     kirby_y = pixel_y;
     
-    star = new NormalImage(star_path);
+    star = new AnimationImage("star/kirby/star", 8, STAR_ANIMATION_SPEED);
     
     setImageContainer(star);
     

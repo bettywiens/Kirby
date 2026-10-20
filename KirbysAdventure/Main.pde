@@ -1,8 +1,9 @@
 // GLOBALE VARIABLEN
 int SCALE = 2;
 int KIRBY_SPEED = 2;
-int SHOOTING_STAR_SPEED = 100;
+int SHOOTING_STAR_SPEED = 50;
 int SPEED = 4;
+float STAR_ANIMATION_SPEED = 0.8;
 
 float kirby_x;
 float kirby_y;
@@ -38,14 +39,22 @@ void draw()
   sky_background.drawing();
   sky_background.bewege();
   
+  updateKirby();
   kirby.drawObject();
-  kirby.move();
+  //kirby.updateKirby();
   kirby.update();
+  kirby.move();  
   kirby.checkBorders(kirby.flying_height);
   
   energy_ball.drawObject();
   energy_ball.move();
   energy_ball.checkBorders(energy_ball.flying_height);
+}
+
+void updateKirby()
+{
+  kirby_x = kirby.pixel_x;
+  kirby_y = kirby.pixel_y;
 }
 
 void keyPressed() 

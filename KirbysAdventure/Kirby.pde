@@ -36,6 +36,7 @@ class Kirby extends Character
     } else if (key_handler.space_pressed)
     {
       setImageContainer(shooting);
+      kirby_star.resetStar();
       shooting_star = true;
       
     } else if (!key_handler.space_pressed)
@@ -50,7 +51,7 @@ class Kirby extends Character
   
   @Override
   void update()
-  {
+  {    
     if (kirby_star.pixel_x > width){
       shooting_star = false;
       kirby_star.resetStar();
@@ -58,8 +59,10 @@ class Kirby extends Character
     if (shooting_star == true)
     {
       kirby_star.drawObject();      
+      
       kirby_star.shoot();
     }
+    
   }
   
   void setImage()
@@ -69,11 +72,11 @@ class Kirby extends Character
   
   void goUp()
   {
-    pixel_y -= speed;
+    pixel_y -= speed;    
   }
   
   void goDown()
   {
-    pixel_y += speed;
+    pixel_y += speed;    
   }
 }
