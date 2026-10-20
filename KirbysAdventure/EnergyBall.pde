@@ -1,38 +1,71 @@
 class EnergyBall extends Character
 {
-
-  NormalImage flying;
+  AnimationImage flying;
+  NormalImage flying_image;
   float flying_height;
+  
+  int direction_counter;
+  String directions_path = "C:/Users/bwiens/Documents/GitHub/Kirby/KirbysAdventure/data/enemy/directions/energy_ball_directions.txt";
+  String directions_string;
+  char[] directions_array;
 
   EnergyBall(float pixel_x, float pixel_y, float speed)
   {
     super(GameTypes.ENEMY, pixel_x, pixel_y, speed);
+
+    flying = new AnimationImage("enemy/flying", 4, ENERGY_BALL_ANIMATION_SPEED);
     
-    flying = new NormalImage("enemy/flying_1.png");
-    
-    this.flying_height = flying.image_height;
-    
+    flying_image = new NormalImage("enemy/flying_1.png");
+
+    this.flying_height = flying_image.image_height;
 
     setImageContainer(flying);
+
+    direction_counter = 0;
+
+    // Lesen Datei mit Bewegungsinformationen und lagern diese in einem char Array
+    try
+    {
+      directions_string = Files.readString(Path.of(directions_path));
+    } catch (IOException e)
+    {
+      println("File not found");
+    }
+
+    directions_array = directions_string.toCharArray();
   }
 
   @Override
     void move()
-  {
-    if (key_handler.w_pressed || key_handler.up_pressed)
+  {    
+
+    // Wenn Timer vorbei ist bewegt sich EnergyBall abhängig von der direction nach oben oder unten
+    if (timer.isFinished())
     {
-      goUp();
-    } else if (key_handler.s_pressed || key_handler.down_pressed)
-    {
-      goDown();
+      // Wenn der counter die Länge der Datei überschreitet wird er zurückgesetzt
+      if (direction_counter >= directions_array.length)
+      {
+        direction_counter = 0;
+      } else
+      {
+        if (directions_array[direction_counter] == '0')
+        {
+          goUp();
+        } else if (directions_array[direction_counter] == '1')
+        {
+          goDown();
+        }
+        timer.start();
+        direction_counter++;
+      }
     }
   }
 
   @Override
-  void update()
+    void update()
   {
   }
-  
+
 
   void setImage()
   {
@@ -41,16 +74,11 @@ class EnergyBall extends Character
 
   void goUp()
   {
-    pixel_y -= speed + randomOffset(30);
+    pixel_y -= speed;
   }
 
   void goDown()
   {
-    pixel_y += speed + randomOffset(30);
-  }
-  
-  float randomOffset(float random_number)
-  {
-    return random(random_number);  
+    pixel_y += speed;
   }
 }

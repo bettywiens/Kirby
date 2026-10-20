@@ -15,6 +15,8 @@ class Character extends GameObject
   
   CollisionResult checkCollision()
   {
+    
+    
     CollisionResult result = new CollisionResult();
     return result;
    

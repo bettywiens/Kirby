@@ -3,9 +3,9 @@ class Star extends GameObject
 
   float speed;
   
-  Star(float pixel_x, float pixel_y, float speed)
+  Star(float pixel_x, float pixel_y, float speed, GameTypes type)
   {
-    super(GameTypes.STAR, pixel_x, pixel_y);    
+    super(type, pixel_x, pixel_y);    
     this.speed = speed;
   }
   

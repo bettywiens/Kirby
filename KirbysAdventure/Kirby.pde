@@ -1,31 +1,30 @@
 class Kirby extends Character
 {
   NormalImage flying;
-  
+
   AnimationImage shooting;
-  
-  float flying_height;
- 
+
+  float flying_height; // Höhe des Bildes
+
   boolean shooting_star = false;
   
-  
-  
-  
+
   Kirby(float pixel_x, float pixel_y, float speed)
   {
     super(GameTypes.KIRBY, pixel_x, pixel_y, speed);
-    
+
     flying = new NormalImage("kirby/flying.png");
-    
-    shooting = new AnimationImage("kirby/shooting/shooting", 9, 0.8);
-    
+
     flying_height = flying.image_height;
     
+    // Animation wenn Kirby einen Stern schießt
+    shooting = new AnimationImage("kirby/shooting/shooting", 9, 0.8);
+
     setImageContainer(flying);
   }
-  
+
   @Override
-  void move()
+    void move()
   {
     if (key_handler.w_pressed || key_handler.up_pressed)
     {
@@ -36,47 +35,42 @@ class Kirby extends Character
     } else if (key_handler.space_pressed)
     {
       setImageContainer(shooting);
-      kirby_star.resetStar();
+      kirby_star.resetStar(); // Bevor der Stern geschossen wird, wird seine Position geresettet
       shooting_star = true;
-      
     } else if (!key_handler.space_pressed)
-    {      
-      setImageContainer(flying);
-          
+    {
+      setImage();
     }
-    
-    
-    
   }
-  
+
   @Override
-  void update()
-  {    
-    if (kirby_star.pixel_x > width){
+    void update()
+  {
+    if (kirby_star.pixel_x > width) // Wenn Stern außerhalb des Bildschirms ist 
+    { 
       shooting_star = false;
       kirby_star.resetStar();
     }
     if (shooting_star == true)
     {
-      kirby_star.drawObject();      
-      
+      kirby_star.drawObject();
       kirby_star.shoot();
     }
-    
   }
-  
+
+  // Setzt Kirbys default image
   void setImage()
   {
     setImageContainer(flying);
   }
-  
+
   void goUp()
   {
-    pixel_y -= speed;    
+    pixel_y -= speed;
   }
-  
+
   void goDown()
   {
-    pixel_y += speed;    
+    pixel_y += speed;
   }
 }
