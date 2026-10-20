@@ -1,20 +1,17 @@
 class KirbyStar extends Star
-{
-  
-  AnimationImage star;
-  NormalImage star = new NormalImage("star/kirby/star_1.png");
-  
+{  
+  AnimationImage star;    
   
   KirbyStar(float pixel_x, float pixel_y, float speed)
   {
-    super(GameTypes.KIRBY_STAR, pixel_x, pixel_y, speed, star.image_height);
+    super(pixel_x, pixel_y, speed, GameTypes.KIRBY_STAR, star_size);
     
     kirby_x = pixel_x;
     kirby_y = pixel_y;
     
     star = new AnimationImage("star/kirby/star", 8, STAR_ANIMATION_SPEED);
     
-    setImageContainer(star);
+    setImageContainer(star);    
   }
   
   // Schießt Stern von
@@ -26,6 +23,7 @@ class KirbyStar extends Star
   
   void resetStar()
   {
+    energy_ball_collided_with_star = false;
     pixel_x = kirby_x;
     pixel_y = kirby_y;
   }

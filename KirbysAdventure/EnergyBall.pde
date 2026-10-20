@@ -9,9 +9,11 @@ class EnergyBall extends Character
   String directions_string;
   char[] directions_array;
 
+  int counter = 0;
+
   EnergyBall(float pixel_x, float pixel_y, float speed)
   {
-    super(GameTypes.ENEMY, pixel_x, pixel_y, speed, energy_ball_size);
+    super(GameTypes.ENEMY, pixel_x, pixel_y, speed, energy_ball_size, 28);
 
     flying = new AnimationImage("enemy/flying", 4, ENERGY_BALL_ANIMATION_SPEED);
 
@@ -39,6 +41,7 @@ class EnergyBall extends Character
   @Override
     void move()
   {
+    checkCollisionWithStar();
 
     // Wenn Timer vorbei ist bewegt sich EnergyBall abhängig von der direction nach oben oder unten
     if (timer.isFinished())
@@ -62,15 +65,25 @@ class EnergyBall extends Character
     }
   }
 
-  void checkCollision()
+  void checkCollisionWithStar()
   {
-    CollisionResult collision_result = checkCollision();
+    CollisionResult collision_result = checkCollision(pixel_x, pixel_y);
 
     if (collision_result != null)
     {
-      if (collision_result.type.equals(GameTypes.KIRBY_STAR))
+      if (collision_result.type == GameTypes.KIRBY_STAR && !energy_ball_collided_with_star)
       {
-        println("collided :))");
+        if (health < 0)
+        {
+          println("gewonnen");
+          return;
+        } else
+        {
+          energy_ball_collided_with_star = true;
+          health--;          
+          enemy_health.setHealthBar(health);
+          println("Energy Ball Health: " + health);
+        }
       }
     }
   }
