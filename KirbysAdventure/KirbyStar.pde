@@ -14,7 +14,7 @@ class KirbyStar extends Star
     setImageContainer(star);    
   }
   
-  // Schießt Stern von
+  // Schießt Stern von Kirby aus in Richtung gegner
   void shoot()
   {
     pixel_y = kirby_y;

@@ -30,6 +30,10 @@ class Background implements Menu
   {
     image(sky_1, sky_1_x, 0, width, sky_height);
     image(sky_2, sky_2_x, 0, width, sky_height);
+  }
+  
+  void drawStats()
+  {
     image(stats_bar, 0, height - stats_bar_height, width, stats_bar_height);
   }
   

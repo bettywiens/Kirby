@@ -2,6 +2,7 @@ class EnergyBall extends Character
 {
   AnimationImage flying;
   NormalImage flying_image;
+  AnimationImage damage;
   float flying_height;
 
   int direction_counter;
@@ -10,14 +11,18 @@ class EnergyBall extends Character
   char[] directions_array;
 
   int counter = 0;
+  
+  boolean shooting_star = false;
 
   EnergyBall(float pixel_x, float pixel_y, float speed)
   {
     super(GameTypes.ENEMY, pixel_x, pixel_y, speed, energy_ball_size, 28);
 
-    flying = new AnimationImage("enemy/flying", 4, ENERGY_BALL_ANIMATION_SPEED);
+    flying = new AnimationImage("enemy/flying/frame", 4, ENERGY_BALL_ANIMATION_SPEED);
 
-    flying_image = new NormalImage("enemy/flying_1.png");
+    flying_image = new NormalImage("enemy/flying/frame_1.png");
+    
+    damage = new AnimationImage("enemy/damage/frame", 4, 2); 
 
     this.flying_height = flying_image.image_height;
 
@@ -58,6 +63,20 @@ class EnergyBall extends Character
         } else if (directions_array[direction_counter] == '1')
         {
           goDown();
+        } else if (directions_array[direction_counter] == '2')
+        {
+          goRight();
+        } else if (directions_array[direction_counter] == '3')
+        {
+          goLeft();
+        } 
+        else if (directions_array[direction_counter] == 's')
+        {
+          println("Enemy is shooting");
+          star_1.resetStar(); // Bevor der Stern geschossen wird, wird seine Position geresettet
+          star_2.resetStar();
+          star_3.resetStar();
+          shooting_star = true;
         }
         timer.start();
         direction_counter++;
@@ -67,7 +86,7 @@ class EnergyBall extends Character
 
   void checkCollisionWithStar()
   {
-    CollisionResult collision_result = checkCollision(pixel_x, pixel_y);
+    CollisionResult collision_result = checkCollision(pixel_x, pixel_y, "enemy");
 
     if (collision_result != null)
     {
@@ -80,6 +99,7 @@ class EnergyBall extends Character
         } else
         {
           energy_ball_collided_with_star = true;
+          setImageContainer(damage);
           health--;          
           enemy_health.setHealthBar(health);
           println("Energy Ball Health: " + health);
@@ -91,6 +111,29 @@ class EnergyBall extends Character
   @Override
     void update()
   {
+    println("Star 1 X: " + star_1.pixel_x);
+    // Wenn Stern außerhalb des Bildschirms ist
+    if (star_1.pixel_x < 0) 
+    {
+      shooting_star = false;
+      kirby_collided_with_star = false;
+      star_1.resetStar();
+      star_2.resetStar();
+      star_3.resetStar();
+      //print("outside");
+    }
+    // Wenn Stern geschossen wird
+    if (shooting_star == true)
+    {
+      // Wir schießen erst und zeichnen dann, damit der Stern nicht auf dem Energy Ball selbst gezeichnet wird
+      star_1.shoot();
+      star_2.shoot();
+      star_3.shoot();
+      star_1.drawObject();
+      star_2.drawObject();
+      star_3.drawObject();
+      
+    }
   }
 
 
@@ -107,5 +150,15 @@ class EnergyBall extends Character
   void goDown()
   {
     pixel_y += speed;
+  }
+  
+  void goRight()
+  {
+    pixel_x += speed;
+  }
+  
+  void goLeft()
+  {
+    pixel_y -= speed;
   }
 }

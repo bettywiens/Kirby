@@ -13,4 +13,8 @@ class Star extends GameObject
   {
   }
   
+  void resetStar()
+  {
+  }
+  
 }
