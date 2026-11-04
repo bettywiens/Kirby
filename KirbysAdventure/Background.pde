@@ -1,4 +1,4 @@
-class Background implements Menu
+class Background
 {
   String sky_path = "background/sky.png";
 

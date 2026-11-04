@@ -33,6 +33,8 @@ float lower_border;
 
 boolean energy_ball_collided_with_star = false;
 boolean kirby_collided_with_star = false;
+boolean energy_ball_damaged = false;
+boolean game_over = false;
 
 ArrayList<GameObject> game_objects;
 
@@ -51,19 +53,21 @@ EnergyBallStar star_3;
 Timer timer;
 EnemyHealth enemy_health;
 KirbyHealth kirby_health;
+Lives lives;
+Menu menu;
 
 void setup()
 {
   size(800, 600);
-  
+
   // Images:
-  energy_ball_image = new NormalImage("enemy/flying_1.png");
+  energy_ball_image = new NormalImage("enemy/flying/frame_1.png");
   kirby_image = new NormalImage("kirby/flying.png");
   star_image = new NormalImage("star/kirby/star_1.png");
-  
+
   key_handler = new KeyHandler();
   sky_background = new Background();
-  
+
   // Untere Grenze vom Spielfeld
   lower_border = height - sky_background.stats_bar_height;
 
@@ -81,7 +85,7 @@ void setup()
   game_objects.add(kirby);
   kirby_x = kirby.pixel_x;
   kirby_y = kirby.pixel_y;
-  
+
   // Kirbys Stern:
   kirby_star = new KirbyStar(kirby_x, kirby_y, SHOOTING_STAR_SPEED);
   kirby_star.size = star_image.image_height * 2;
@@ -95,7 +99,7 @@ void setup()
   enemy_health = new EnemyHealth(200, 537, 300);
   energy_ball_x = energy_ball.pixel_x;
   energy_ball_y = energy_ball.pixel_y;
-  
+
   // Energy Ball Stern:
   star_1 = new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT");
   star_1.size = star_size;
@@ -107,20 +111,31 @@ void setup()
   star_3.size = star_size;
   game_objects.add(star_3);
   
-   
+
   // Star:
   star_size = star_image.image_height * 2;
+  
+  // Leben:
+  lives = new Lives(200,200,20);
+  
+  menu = new Menu(0,0,0);
 }
 
 void draw()
-{     
+{
+  menu.drawMenu();
+  //firstEnemy();
+}
+
+void firstEnemy()
+{
   sky_background.drawing();
   sky_background.bewege();
   sky_background.drawStats();
 
   updateKirby();
   kirby.update();
-  kirby.drawObject();  
+  kirby.drawObject();
   kirby.move();
   //rect(star_1.pixel_x, star_1.pixel_y, star_size, star_size);
   //println(kirby_size);
@@ -128,13 +143,14 @@ void draw()
 
   updateEnergyBall();
   energy_ball.drawObject();
-  energy_ball.update(); 
+  energy_ball.update();
   sky_background.drawStats();
   energy_ball.move();
   energy_ball.checkBorders(energy_ball.flying_height);
-  
+
   enemy_health.drawObject();
   kirby_health.drawObject();
+  lives.showLives(5);
 }
 
 void updateKirby()

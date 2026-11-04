@@ -10,6 +10,7 @@ class KeyHandler
   boolean s_pressed;
   boolean d_pressed;
   boolean o_pressed;
+  boolean enter_pressed;
 
   KeyHandler()
   {
@@ -37,6 +38,10 @@ class KeyHandler
     if (keyCode == RIGHT)
     {
       right_pressed = true;
+    }
+    if (keyCode == ENTER)
+    {
+      enter_pressed = true;
     }
     if (key == 'w')
     {
@@ -81,6 +86,10 @@ class KeyHandler
     if (keyCode == RIGHT)
     {
       right_pressed = false;
+    }
+    if (keyCode == ENTER)
+    {
+      enter_pressed = false;
     }
     if (key == 'w')
     {

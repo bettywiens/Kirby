@@ -71,8 +71,7 @@ class EnergyBall extends Character
           goLeft();
         } 
         else if (directions_array[direction_counter] == 's')
-        {
-          println("Enemy is shooting");
+        {          
           star_1.resetStar(); // Bevor der Stern geschossen wird, wird seine Position geresettet
           star_2.resetStar();
           star_3.resetStar();
@@ -92,17 +91,16 @@ class EnergyBall extends Character
     {
       if (collision_result.type == GameTypes.KIRBY_STAR && !energy_ball_collided_with_star)
       {
-        if (health < 0)
+        if (health == 0)
         {
           println("gewonnen");
           return;
         } else
         {
           energy_ball_collided_with_star = true;
-          setImageContainer(damage);
-          health--;          
-          enemy_health.setHealthBar(health);
-          println("Energy Ball Health: " + health);
+          energy_ball_damaged = true;
+          health-=2;          
+          enemy_health.setHealthBar(health);          
         }
       }
     }
@@ -110,8 +108,7 @@ class EnergyBall extends Character
 
   @Override
     void update()
-  {
-    println("Star 1 X: " + star_1.pixel_x);
+  {    
     // Wenn Stern außerhalb des Bildschirms ist
     if (star_1.pixel_x < 0) 
     {
@@ -119,8 +116,7 @@ class EnergyBall extends Character
       kirby_collided_with_star = false;
       star_1.resetStar();
       star_2.resetStar();
-      star_3.resetStar();
-      //print("outside");
+      star_3.resetStar();      
     }
     // Wenn Stern geschossen wird
     if (shooting_star == true)
@@ -133,6 +129,13 @@ class EnergyBall extends Character
       star_2.drawObject();
       star_3.drawObject();
       
+    }
+    if(energy_ball_damaged)
+    {
+      setImageContainer(damage); // Anderes Bild festlegen für, wenn man den Energy Ball trifft
+    } else
+    {
+      setImage();
     }
   }
 
@@ -160,5 +163,29 @@ class EnergyBall extends Character
   void goLeft()
   {
     pixel_y -= speed;
+  }
+  
+  void goRightUp()
+  {
+    pixel_x += speed;
+    pixel_y -= speed;
+  }
+  
+  void goRightDown()
+  {
+    pixel_x += speed;
+    pixel_y += speed;
+  }
+  
+  void goLeftUp()
+  {
+    pixel_x -= speed;
+    pixel_y -= speed;
+  }
+  
+  void goLeftDown()
+  {
+    pixel_x -= speed;
+    pixel_y += speed;
   }
 }
