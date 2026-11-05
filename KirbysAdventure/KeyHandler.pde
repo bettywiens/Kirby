@@ -5,12 +5,13 @@ class KeyHandler
   boolean left_pressed;
   boolean right_pressed;
   boolean down_pressed;
+  boolean enter_pressed;
   boolean w_pressed;
   boolean a_pressed;
   boolean s_pressed;
   boolean d_pressed;
   boolean o_pressed;
-  boolean enter_pressed;
+  boolean e_pressed;
 
   KeyHandler()
   {
@@ -63,6 +64,10 @@ class KeyHandler
     {
       o_pressed = true;
     }
+    if (key == 'e')
+    {
+      e_pressed = true;
+    }
   }
 
   void released()
@@ -110,6 +115,10 @@ class KeyHandler
     if (key == 'o')
     {
       o_pressed = false;
+    }
+    if (key == 'e')
+    {
+      e_pressed = false;
     }
   }
 }

@@ -42,6 +42,9 @@ class Kirby extends Character
     {
       //checkCollisionWithStar();
       setImage();
+    } else if (key_handler.e_pressed)
+    {
+      menu_open = true;
     }
   }
 

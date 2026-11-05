@@ -14,6 +14,7 @@ int SHOOTING_STAR_SPEED = 50;
 int SHOOTING_ENEMY_SPEED = 20;
 int ENERGY_BALL_SPEED = 5;
 
+
 float kirby_x;
 float kirby_y;
 float kirby_start_x = 100;
@@ -31,10 +32,13 @@ float star_size;
 
 float lower_border;
 
+int kirby_lives = 5;
+
 boolean energy_ball_collided_with_star = false;
 boolean kirby_collided_with_star = false;
 boolean energy_ball_damaged = false;
 boolean game_over = false;
+boolean menu_open = false;
 
 ArrayList<GameObject> game_objects;
 
@@ -116,15 +120,23 @@ void setup()
   star_size = star_image.image_height * 2;
   
   // Leben:
-  lives = new Lives(200,200,20);
+  lives = new Lives(690, kirby_health_y + 23 ,20, "health/numbers/");  
   
   menu = new Menu(0,0,0);
 }
 
 void draw()
 {
-  menu.drawMenu();
-  //firstEnemy();
+  if (menu_open)
+  {
+    menu.drawMenu();
+  } else if (game_over)
+  {
+    menu.drawGameOver();
+  } else
+  {
+    firstEnemy();
+  }
 }
 
 void firstEnemy()
@@ -150,7 +162,7 @@ void firstEnemy()
 
   enemy_health.drawObject();
   kirby_health.drawObject();
-  lives.showLives(5);
+  lives.showLives(kirby_lives);
 }
 
 void updateKirby()

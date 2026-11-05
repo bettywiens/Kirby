@@ -7,11 +7,11 @@ class Lives extends GameObject
   String image_path;
   String livesS;
 
-  Lives(float pixel_x, float pixel_y, float size) 
+  Lives(float pixel_x, float pixel_y, float size, String image_path) 
   {
     super(GameTypes.LIVES, pixel_x, pixel_y, size);
-    zero = new NormalImage("health/numbers/0.png");
-    image_path = "health/numbers/";
+    zero = new NormalImage(image_path + "0.png");
+    this.image_path = image_path;
     setImageContainer(zero);
   }
 
@@ -33,7 +33,7 @@ class Lives extends GameObject
       live_image_0 = new NormalImage(image_path + livesArray[1] + ".png");
       live_image_1 = new NormalImage(image_path + livesArray[0] + ".png");      
     } 
-    live_image_0.drawImage(690, kirby_health_y + 23);
-    live_image_1.drawImage(670, kirby_health_y + 23);
+    live_image_0.drawImage(pixel_x, pixel_y);
+    live_image_1.drawImage(pixel_x - 20, pixel_y);
   }
 }
