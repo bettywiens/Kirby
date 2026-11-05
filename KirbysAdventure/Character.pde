@@ -18,12 +18,11 @@ class Character extends GameObject
   }
 
   CollisionResult checkCollision(float pixel_x, float pixel_y, String type)
-  {
-    //println("Type: " + type, "|| Object size: " + object_size);
+  { 
+    // es wird durch alle game_objects iteriert
     for (int i = 0; i < game_objects.size(); i++)
     {
-      GameObject collision_object = game_objects.get(i);
-      //println(game_objects.get(i).type);
+      GameObject collision_object = game_objects.get(i);      
 
       float collision_size = collision_object.size;
 
@@ -47,8 +46,9 @@ class Character extends GameObject
           result.id = i;
           return result;
         } else if ( type == "kirby" && (
-        
-          (object_pixel_x1 < (pixel_x + kirby_size) && (object_pixel_x1 > pixel_x)) // Überlappung in der x-Ebene
+          // !!! Kollision wird nicht immer wahrgenommen
+          ((object_pixel_x1 < (pixel_x + kirby_size) && (object_pixel_x1 > pixel_x)) || 
+          (object_pixel_x2 < (pixel_x + kirby_size)) && (object_pixel_x2 > pixel_x)) // Überlappung in der x-Ebene 
           &&
           (
           (object_pixel_y1 < pixel_y + kirby_size && object_pixel_y1 > pixel_y) || // Überlappung in der y-Ebene
@@ -61,11 +61,7 @@ class Character extends GameObject
         {
           CollisionResult result = new CollisionResult();
           result.object = collision_object;
-          result.type = collision_object.getType();
-          if (result.type == GameTypes.ENEMY_STAR)
-            println("links vorbei");
-          {
-          }
+          result.type = collision_object.getType();          
           result.id = i;
           return result;
         }

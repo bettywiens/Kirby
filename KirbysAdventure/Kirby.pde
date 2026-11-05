@@ -6,11 +6,12 @@ class Kirby extends Character
 
   float flying_height; // Höhe des Bildes
 
-  boolean shooting_star = false;  
+  boolean shooting_star = false;
+
 
   Kirby(float pixel_x, float pixel_y, float speed)
   {
-    super(GameTypes.KIRBY, pixel_x, pixel_y, speed, kirby_size, 7);
+    super(GameTypes.KIRBY, pixel_x, pixel_y, speed, kirby_size, 3);
 
     flying = new NormalImage("kirby/flying.png");
 
@@ -25,16 +26,16 @@ class Kirby extends Character
   @Override
     void move()
   {
-    kirby_health.setHealthBar(health);    
+    kirby_health.setHealthBar(health);
     checkCollisionWithStar();
     if (key_handler.w_pressed || key_handler.up_pressed)
-    {      
+    {
       goUp();
     } else if (key_handler.s_pressed || key_handler.down_pressed)
     {
       goDown();
     } else if (key_handler.space_pressed)
-    {      
+    {
       setImageContainer(shooting); // Anderes Bild für wenn Kirby schießt
       kirby_star.resetStar(); // Bevor der Stern geschossen wird, wird seine Position geresettet
       shooting_star = true;
@@ -42,8 +43,7 @@ class Kirby extends Character
     {
       println("e pressed");
       menu_open = true;
-    } 
-    else if (!key_handler.space_pressed)
+    } else if (!key_handler.space_pressed)
     {
       //checkCollisionWithStar();
       setImage();
@@ -71,26 +71,26 @@ class Kirby extends Character
   }
 
   void checkCollisionWithStar()
-  {    
+  {
     CollisionResult collision_result = checkCollision(pixel_x, pixel_y, "kirby");
 
     if (collision_result != null)
-    {      
+    {
       if (collision_result.type == GameTypes.ENEMY_STAR && !kirby_collided_with_star)
       {
-        if (health == 0 && !live_lost)
-        {
-          kirby_lives--;
-          // go to "try again screen"
-          // try_again = true; lives_lost = false
-          live_lost = true;
-          return;
-        } else
+        if (health > 0)
         {
           kirby_collided_with_star = true;
           health--;
+          println("HEALTH: " + health);
           kirby_health.setHealthBar(health);
-          println("Kirby Ball Health: " + health);
+          if (health == 0 && !live_lost)
+          {
+            println("HEALTH = 0");
+            kirby_lives--;
+            live_lost = true;
+            try_again_open = true;
+          }
         }
       }
     }

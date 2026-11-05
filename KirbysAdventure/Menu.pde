@@ -9,6 +9,8 @@ class Menu extends GameObject
   NormalImage try_again;
   NormalImage yes;
   NormalImage no;
+  NormalImage home_background;
+  NormalImage selector;
 
   float lives_x = 300;
   float lives_y = 160;
@@ -22,6 +24,7 @@ class Menu extends GameObject
   float no_x;
   float center = width/2;
   float pointer_x;
+  float selector_y;
 
   Menu(float pixel_x, float pixel_y, float size)
   {
@@ -35,14 +38,25 @@ class Menu extends GameObject
     try_again = new NormalImage("menu/try_again.png");
     yes = new NormalImage("menu/yes.png");
     no = new NormalImage("menu/no.png");
+    home_background = new NormalImage("menu/home/background.png");
+    selector = new NormalImage("menu/home/selector.png");
+
     try_again_x = center - (try_again.image_width);
     no_x = center + no.image_width;
     pointer_x  = try_again_x - gap;
+    selector_y = 350;
   }
 
   void drawGameOver()
   {
     game_over_screen.drawBackgroundImage(0, 0);
+  }
+
+  void drawHomeMenu()
+  {
+    home_background.drawBackgroundImage(0, 0); // 350 // 390 // 430
+    selector.drawImage(82, selector_y);
+    update();
   }
 
   void drawMenu()
@@ -53,12 +67,13 @@ class Menu extends GameObject
     menu_lives.showLives(kirby_lives);
     game_end.drawImage(300, game_end_y);
     continue_image.drawImage(300, continue_y);
-    pointer.drawImage(250, pointer_y);    
+    pointer.drawImage(250, pointer_y);
     update();
   }
 
   void drawTryAgain()
   {
+    live_lost = false;
     background.drawBackgroundImage(0, 0);
     try_again.drawImage(try_again_x, try_again_y);
     lives.drawImage(try_again_x, lives_y);
@@ -72,6 +87,7 @@ class Menu extends GameObject
 
   void update() // add to determine if we're in try_again or menu
   {
+    // IN-GAME Menü
     if (menu_open)
     {
       if (key_handler.up_pressed)
@@ -88,21 +104,19 @@ class Menu extends GameObject
         }
       } else if (key_handler.enter_pressed)
       {
+        // Spiel beenden
         if (pointer_y == game_end_y)
         {
-          // TO DO:
-          // Spiel beenden, zuück zum Startbildschirm
-          // Leben zurücksetzen
-          // Startbildschirm implementieren
-          println("end game");
+          game_playing = false;
+          menu_open = false;
+          home_open = true;
+        // Spiel weiterspielen
         } else if (pointer_y == continue_y)
         {
-          // TO DO:
-          // Spiel weiter fortführen
-          // Leben beibehalten, Level Fortschritt sollte weitergehen wo es aufgehört hat
-          println("continue game");
+          menu_open = false;                    
         }
       }
+    // TRY-AGAIN Menü
     } else if (try_again_open)
     {
       if (key_handler.left_pressed)
@@ -119,13 +133,44 @@ class Menu extends GameObject
         }
       } else if (key_handler.enter_pressed)
       {
+        // Nicht nochmal versuchen
         if (pointer_x == no_x - gap)
         {
-          println("Nicht weiterspielen, zurück zum Startbildschirm");
+          println("nein");
+          game_playing = false;          
+          try_again_open = false;
+          home_open = true;          
+        // Nochmal versuchen
         } else if (pointer_x == try_again_x - gap)
         {
-          println("Spiel wird mit jetzigen Leben weitergespielt");
+          try_again_open = false;
+          resetGame();
+          game_playing = true;
         }
+      }
+    // HOME Screen
+    } else if (home_open)
+    {
+      if (key_handler.down_pressed)
+      {
+        if (selector_y < 430) {
+          selector_y += 40;
+        }
+      } else if (key_handler.up_pressed)
+      {
+        if (selector_y > 350)
+        {
+          selector_y -= 40;
+        }
+      } else if (key_handler.e_pressed)
+      {
+        exit();
+      }
+      else if (key_handler.enter_pressed)
+      {
+        home_open = false;
+        resetGame();
+        game_playing = true;
       }
     }
   }

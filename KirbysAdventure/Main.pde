@@ -40,7 +40,9 @@ boolean energy_ball_damaged = false;
 boolean live_lost = false;
 boolean game_over = false;
 boolean menu_open = false;
-boolean try_again_open = true;
+boolean try_again_open = false;
+boolean home_open = true;
+boolean game_playing = false;
 
 ArrayList<GameObject> game_objects;
 
@@ -116,30 +118,35 @@ void setup()
   star_3 = new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT_DOWN");
   star_3.size = star_size;
   game_objects.add(star_3);
-  
+
 
   // Star:
   star_size = star_image.image_height * 2;
-  
+
   // Leben:
-  lives = new Lives(690, kirby_health_y + 23 ,20, "health/numbers/");  
-  
-  menu = new Menu(0,0,0);
+  lives = new Lives(690, kirby_health_y + 23, 20, "health/numbers/");
+
+  menu = new Menu(0, 0, 0);
 }
 
 void draw()
 {
-  menu.drawTryAgain();
-  //if (menu_open)
-  //{
-  //  menu.drawMenu();
-  //} else if (game_over)
-  //{
-  //  menu.drawGameOver();
-  //} else
-  //{
-  //  firstEnemy();
-  //}
+  if (menu_open)
+  {
+    menu.drawMenu();
+  } else if (game_over)
+  {
+    menu.drawGameOver();
+  } else if (try_again_open)
+  {
+    menu.drawTryAgain();
+  } else if (home_open)
+  {
+    menu.drawHomeMenu();
+  } else if (game_playing)
+  {
+    firstEnemy();
+  }
 }
 
 void firstEnemy()
@@ -166,6 +173,21 @@ void firstEnemy()
   enemy_health.drawObject();
   kirby_health.drawObject();
   lives.showLives(kirby_lives);
+}
+
+void resetGame()
+{
+  kirby.health = 7;
+
+  energy_ball = new EnergyBall (600, 200, ENERGY_BALL_SPEED);
+  energy_ball.size = energy_ball_image.image_height * 2;
+  game_objects.add(energy_ball);
+  enemy_health = new EnemyHealth(200, 537, 300);
+  energy_ball_x = energy_ball.pixel_x;
+  energy_ball_y = energy_ball.pixel_y;
+
+  energy_ball.health = 28;
+  enemy_health.setHealthBar(energy_ball.health);
 }
 
 void updateKirby()
