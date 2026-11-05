@@ -89,7 +89,7 @@ class Kirby extends Character
             println("HEALTH = 0");
             kirby_lives--;
             live_lost = true;
-            try_again_open = true;
+            game_over = true;
           }
         }
       }

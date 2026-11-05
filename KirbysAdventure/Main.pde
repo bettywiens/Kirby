@@ -32,7 +32,7 @@ float star_size;
 
 float lower_border;
 
-int kirby_lives = 5;
+int kirby_lives = 1;
 
 boolean energy_ball_collided_with_star = false;
 boolean kirby_collided_with_star = false;
@@ -55,9 +55,6 @@ Background sky_background;
 Kirby kirby;
 EnergyBall energy_ball;
 KirbyStar kirby_star;
-EnergyBallStar star_1;
-EnergyBallStar star_2;
-EnergyBallStar star_3;
 Timer timer;
 EnemyHealth enemy_health;
 KirbyHealth kirby_health;
@@ -108,20 +105,8 @@ void setup()
   energy_ball_x = energy_ball.pixel_x;
   energy_ball_y = energy_ball.pixel_y;
 
-  // Energy Ball Stern:
-  star_1 = new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT");
-  star_1.size = star_size;
-  game_objects.add(star_1);
-  star_2 = new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT_UP");
-  star_2.size = star_size;
-  game_objects.add(star_2);
-  star_3 = new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT_DOWN");
-  star_3.size = star_size;
-  game_objects.add(star_3);
-
-
   // Star:
-  star_size = star_image.image_height * 2;
+  star_size = star_image.image_height * 1.5;
 
   // Leben:
   lives = new Lives(690, kirby_health_y + 23, 20, "health/numbers/");
@@ -131,18 +116,24 @@ void setup()
 
 void draw()
 {
+  
+  // IN-GAME MENÜ
   if (menu_open)
   {
     menu.drawMenu();
+  // GAME-OVER SCREEN
   } else if (game_over)
   {
     menu.drawGameOver();
+  // TRY_AGAIN SCREEN
   } else if (try_again_open)
-  {
+  { 
     menu.drawTryAgain();
+  // HOME SCREEn
   } else if (home_open)
   {
     menu.drawHomeMenu();
+  // SPIEL AKTIV
   } else if (game_playing)
   {
     firstEnemy();
@@ -159,9 +150,10 @@ void firstEnemy()
   kirby.update();
   kirby.drawObject();
   kirby.move();
-  //rect(star_1.pixel_x, star_1.pixel_y, star_size, star_size);
-  //println(kirby_size);
   kirby.checkBorders(kirby.flying_height);
+  //rect(star_1.pixel_x, star_1.pixel_y, star_size, star_size);
+  //rect(star_2.pixel_x, star_2.pixel_y, star_size, star_size);
+  //rect(star_3.pixel_x, star_3.pixel_y, star_size, star_size);
 
   updateEnergyBall();
   energy_ball.drawObject();

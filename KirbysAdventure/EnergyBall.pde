@@ -10,6 +10,10 @@ class EnergyBall extends Character
   String directions_string;
   char[] directions_array;
 
+  EnergyBallStar star_1;
+  EnergyBallStar star_2;
+  EnergyBallStar star_3;
+
   int counter = 0;
 
   boolean shooting_star = false;
@@ -29,6 +33,17 @@ class EnergyBall extends Character
     setImageContainer(flying);
 
     direction_counter = 0;
+
+    // Energy Ball Stern:
+    star_1 = new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT");
+    star_1.size = star_size;
+    game_objects.add(star_1);
+    star_2 = new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT_UP");
+    star_2.size = star_size;
+    game_objects.add(star_2);
+    star_3 = new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT_DOWN");
+    star_3.size = star_size;
+    game_objects.add(star_3);
   }
 
   void readFile()
