@@ -37,8 +37,10 @@ int kirby_lives = 5;
 boolean energy_ball_collided_with_star = false;
 boolean kirby_collided_with_star = false;
 boolean energy_ball_damaged = false;
+boolean live_lost = false;
 boolean game_over = false;
 boolean menu_open = false;
+boolean try_again_open = true;
 
 ArrayList<GameObject> game_objects;
 
@@ -127,16 +129,17 @@ void setup()
 
 void draw()
 {
-  if (menu_open)
-  {
-    menu.drawMenu();
-  } else if (game_over)
-  {
-    menu.drawGameOver();
-  } else
-  {
-    firstEnemy();
-  }
+  menu.drawTryAgain();
+  //if (menu_open)
+  //{
+  //  menu.drawMenu();
+  //} else if (game_over)
+  //{
+  //  menu.drawGameOver();
+  //} else
+  //{
+  //  firstEnemy();
+  //}
 }
 
 void firstEnemy()

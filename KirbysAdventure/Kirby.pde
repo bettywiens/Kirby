@@ -38,13 +38,15 @@ class Kirby extends Character
       setImageContainer(shooting); // Anderes Bild für wenn Kirby schießt
       kirby_star.resetStar(); // Bevor der Stern geschossen wird, wird seine Position geresettet
       shooting_star = true;
-    } else if (!key_handler.space_pressed)
+    } else if (key_handler.e_pressed)
+    {
+      println("e pressed");
+      menu_open = true;
+    } 
+    else if (!key_handler.space_pressed)
     {
       //checkCollisionWithStar();
       setImage();
-    } else if (key_handler.e_pressed)
-    {
-      menu_open = true;
     }
   }
 
@@ -76,9 +78,12 @@ class Kirby extends Character
     {      
       if (collision_result.type == GameTypes.ENEMY_STAR && !kirby_collided_with_star)
       {
-        if (health < 0)
+        if (health == 0 && !live_lost)
         {
-          println("gewonnen");
+          kirby_lives--;
+          // go to "try again screen"
+          // try_again = true; lives_lost = false
+          live_lost = true;
           return;
         } else
         {
