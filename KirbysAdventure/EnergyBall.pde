@@ -14,9 +14,12 @@ class EnergyBall extends Character
   EnergyBallStar star_2;
   EnergyBallStar star_3;
 
+  EnergyBallBurst burst;
+
   int counter = 0;
 
   boolean shooting_star = false;
+  boolean shooting_burst = false;
 
   EnergyBall(float pixel_x, float pixel_y, float speed)
   {
@@ -44,6 +47,11 @@ class EnergyBall extends Character
     star_3 = new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT_DOWN");
     star_3.size = star_size;
     game_objects.add(star_3);
+
+    // Burst
+    burst = new EnergyBallBurst(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT");
+    burst.size = star_size;
+    game_objects.add(burst);
   }
 
   void readFile()
@@ -84,16 +92,20 @@ class EnergyBall extends Character
           goDown();
         } else if (directions_array[direction_counter] == '2')
         {
-          goRight();
+          goRight(1);
         } else if (directions_array[direction_counter] == '3')
         {
-          goLeft();
+          goLeft(1);
         } else if (directions_array[direction_counter] == 's')
         {
           star_1.resetStar(); // Bevor der Stern geschossen wird, wird seine Position geresettet
           star_2.resetStar();
           star_3.resetStar();
           shooting_star = true;
+        } else if (directions_array[direction_counter] == 'b')
+        {
+          burst.resetStar();
+          shooting_burst = true;
         }
         timer.start();
         direction_counter++;
@@ -109,16 +121,14 @@ class EnergyBall extends Character
     {
       if (collision_result.type == GameTypes.KIRBY_STAR && !energy_ball_collided_with_star)
       {
+        energy_ball_collided_with_star = true;
+        energy_ball_damaged = true;
+        health-=2;
+        enemy_health.setHealthBar(health);
         if (health == 0)
         {
-          println("gewonnen");
-          return;
-        } else
-        {
-          energy_ball_collided_with_star = true;
-          energy_ball_damaged = true;
-          health-=2;
-          enemy_health.setHealthBar(health);
+          game_playing = false;
+          kirby_won = true;
         }
       }
     }
@@ -147,6 +157,21 @@ class EnergyBall extends Character
       star_2.drawObject();
       star_3.drawObject();
     }
+    // Wenn burst außerhalb des Bildschirms ist
+    if (burst.pixel_x < 0)
+    {
+      shooting_burst = false;
+      burst.resetStar();
+    }
+
+    // Wenn Burst geschossen wird
+    if (shooting_burst == true)
+    {
+
+      burst.shoot();
+      burst.drawObject();
+    }
+
     if (energy_ball_damaged)
     {
       setImageContainer(damage); // Anderes Bild festlegen für, wenn man den Energy Ball trifft
@@ -172,14 +197,14 @@ class EnergyBall extends Character
     pixel_y += speed;
   }
 
-  void goRight()
+  void goRight(int steps)
   {
-    pixel_x += speed;
+    pixel_x += steps * speed;
   }
 
-  void goLeft()
+  void goLeft(int steps)
   {
-    pixel_y -= speed;
+    pixel_x -= steps * speed;
   }
 
   void goRightUp()

@@ -1,9 +1,13 @@
 class Menu extends GameObject
 {
+  boolean enter_pressed = false;
+
   AnimationImage game_over_background;
   AnimationImage background;
+  AnimationImage won_background;
   NormalImage home_background;
-  
+
+
   NormalImage game_end;
   NormalImage lives;
   NormalImage continue_image;
@@ -30,11 +34,12 @@ class Menu extends GameObject
   Menu(float pixel_x, float pixel_y, float size)
   {
     super(GameTypes.MENU, pixel_x, pixel_y, size);
-    
+
     game_over_background = new AnimationImage("menu/game_over/frame", 5, 0.1);
     background = new AnimationImage("menu/background/frame", 7, 0.1);
     home_background = new NormalImage("menu/home/background.png");
-    
+    won_background = new AnimationImage("menu/won/", 25, 0.2);
+
     game_end = new NormalImage("menu/game_end.png");
     lives = new NormalImage("menu/lives.png");
     continue_image = new NormalImage("menu/continue.png");
@@ -50,10 +55,16 @@ class Menu extends GameObject
     selector_y = 350;
   }
 
+  void drawWonScreen()
+  {
+    won_background.drawBackgroundImage(0, 0);
+    update();
+  }
+
   void drawGameOver()
   {
     game_over_background.drawBackgroundImage(0, 0);
-    continue_image.drawImage(center - continue_image.image_width,220);
+    continue_image.drawImage(center - continue_image.image_width, 220);
     pointer.drawImage(center-continue_image.image_width-pointer.image_width - 30, 220);
     update();
   }
@@ -91,7 +102,7 @@ class Menu extends GameObject
     update();
   }
 
-  void update() 
+  void update()
   {
     // IN-GAME Menü
     if (menu_open)
@@ -110,19 +121,24 @@ class Menu extends GameObject
         }
       } else if (key_handler.enter_pressed) // auswählen
       {
+        enter_pressed = true;
+      } else if (!key_handler.enter_pressed && enter_pressed)
+      {
+        enter_pressed = false;
         // Spiel beenden
         if (pointer_y == game_end_y)
         {
+          resetGame(true);
           game_playing = false;
-          menu_open = false; 
+          menu_open = false;
           home_open = true;
-        // Spiel weiterspielen
+          // Spiel weiterspielen
         } else if (pointer_y == continue_y)
         {
-          menu_open = false;                    
+          menu_open = false;
         }
       }
-    // TRY-AGAIN Menü
+      // TRY-AGAIN Menü
     } else if (try_again_open)
     {
       if (key_handler.left_pressed) // pointer nach links
@@ -139,21 +155,26 @@ class Menu extends GameObject
         }
       } else if (key_handler.enter_pressed) // auswählen
       {
+        enter_pressed = true;
         // Nicht nochmal versuchen --> Spiel beenden, zurück zum Homescreen
+      } else if (!key_handler.enter_pressed && enter_pressed)
+      {
+        enter_pressed = false;
         if (pointer_x == no_x - gap)
-        {          
-          game_playing = false;          
+        {
+          resetGame(true);
+          game_playing = false;
           try_again_open = false;
-          home_open = true;          
-        // Nochmal versuchen --> Spiel wird neu gestartet
+          home_open = true;
+          // Nochmal versuchen --> Spiel wird neu gestartet
         } else if (pointer_x == try_again_x - gap)
         {
+          resetGame(false);
           try_again_open = false;
-          resetGame();
           game_playing = true;
         }
       }
-    // HOME Screen
+      // HOME Screen
     } else if (home_open)
     {
       if (key_handler.down_pressed) // Selector nach unten
@@ -170,21 +191,42 @@ class Menu extends GameObject
       } else if (key_handler.e_pressed) // Spiel schließen
       {
         exit();
-      }
-      else if (key_handler.enter_pressed) // auswählen
+      } else if (key_handler.enter_pressed) // auswählen
       {
+        enter_pressed = true;
+      } else if (!key_handler.enter_pressed && enter_pressed)
+      {
+        enter_pressed = false;
+        resetGame(true);
         home_open = false;
-        resetGame();
         game_playing = true;
       }
-    // GAME OVER Screen
+      // GAME OVER Screen
     } else if (game_over)
     {
       // Keine andere Möglichekeit, da man keine Leben mehr hat
       if (key_handler.enter_pressed) // auswählen
-      {        
+      {
+        enter_pressed = true;
+      } else if (!key_handler.enter_pressed && enter_pressed)
+      {
+        enter_pressed = false;
+        resetGame(true);
         game_over = false;
-        resetGame();
+        game_playing = false;
+        home_open = true;
+      }
+    } else if (kirby_won)
+    {
+      // Keine andere Möglichekeit, da gewonnen
+      if (key_handler.enter_pressed) // auswählen
+      {
+        enter_pressed = true;
+      } else if (!key_handler.enter_pressed && enter_pressed)
+      {
+        enter_pressed = false;
+        resetGame(true);
+        kirby_won = false;
         game_playing = false;
         home_open = true;
       }

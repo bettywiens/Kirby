@@ -7,11 +7,13 @@ class Kirby extends Character
   float flying_height; // Höhe des Bildes
 
   boolean shooting_star = false;
+  
+  int counter = 0;
 
 
   Kirby(float pixel_x, float pixel_y, float speed)
   {
-    super(GameTypes.KIRBY, pixel_x, pixel_y, speed, kirby_size, 3);
+    super(GameTypes.KIRBY, pixel_x, pixel_y, speed, kirby_size, 7);
 
     flying = new NormalImage("kirby/flying.png");
 
@@ -27,7 +29,7 @@ class Kirby extends Character
     void move()
   {
     kirby_health.setHealthBar(health);
-    checkCollisionWithStar();
+
     if (key_handler.w_pressed || key_handler.up_pressed)
     {
       goUp();
@@ -44,8 +46,7 @@ class Kirby extends Character
       println("e pressed");
       menu_open = true;
     } else if (!key_handler.space_pressed)
-    {
-      //checkCollisionWithStar();
+    {      
       setImage();
     }
   }
@@ -53,7 +54,7 @@ class Kirby extends Character
   @Override
     void update()
   {
-    checkCollisionWithStar();
+
     // Wenn Stern außerhalb des Bildschirms ist
     if (kirby_star.pixel_x > width)
     {
@@ -71,13 +72,18 @@ class Kirby extends Character
   }
 
   void checkCollisionWithStar()
-  {
-    CollisionResult collision_result = checkCollision(pixel_x, pixel_y, "kirby");
-
+  {    
+    CollisionResult collision_result = checkCollision(pixel_x, pixel_y, "kirby");    
+    
     if (collision_result != null)
     {
+      if (collision_result.type == GameTypes.ENEMY_STAR)
+      {
+        println("!! collided with projectile");
+      }
       if (collision_result.type == GameTypes.ENEMY_STAR && !kirby_collided_with_star)
       {
+        println("collision");
         if (health > 0)
         {
           kirby_collided_with_star = true;
@@ -89,10 +95,16 @@ class Kirby extends Character
             println("HEALTH = 0");
             kirby_lives--;
             live_lost = true;
-            game_over = true;
+            try_again_open = true;
           }
         }
+        // Sobald Kirbys Kollision mit dem Star endet:
+      } else if (collision_result.type != GameTypes.ENEMY_STAR) {
+        kirby_collided_with_star = false;
       }
+    } else 
+    {
+      kirby_collided_with_star = false;
     }
   }
 
