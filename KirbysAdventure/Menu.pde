@@ -54,13 +54,15 @@ class Menu extends GameObject
     pointer_x  = try_again_x - gap;
     selector_y = 350;
   }
-
+  
+  // Screen, wenn man gewonnen hat:
   void drawWonScreen()
   {
     won_background.drawBackgroundImage(0, 0);
     update();
   }
 
+  // Screen, wenn man alle Leben verloren hat (GAME OVER):
   void drawGameOver()
   {
     game_over_background.drawBackgroundImage(0, 0);
@@ -68,7 +70,8 @@ class Menu extends GameObject
     pointer.drawImage(center-continue_image.image_width-pointer.image_width - 30, 220);
     update();
   }
-
+  
+  // Menü, bei welchem Spiel gestartet wird (HOME SCREEN):
   void drawHomeMenu()
   {
     home_background.drawBackgroundImage(0, 0); // 350 // 390 // 430
@@ -76,6 +79,7 @@ class Menu extends GameObject
     update();
   }
 
+  // Menü, der im Spiel mit 'e' geöffnet werden kann (IN GAME MENU):
   void drawMenu()
   {
     background.drawBackgroundImage(0, 0);
@@ -88,6 +92,7 @@ class Menu extends GameObject
     update();
   }
 
+  // Menü, wenn man ein Leben verloren hat:
   void drawTryAgain()
   {
     live_lost = false;
@@ -216,6 +221,7 @@ class Menu extends GameObject
         game_playing = false;
         home_open = true;
       }
+      // WIN Screen
     } else if (kirby_won)
     {
       // Keine andere Möglichekeit, da gewonnen

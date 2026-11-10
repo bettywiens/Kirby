@@ -37,10 +37,10 @@ class EnergyBallBurst extends Star
     }    
   }
   
+// !!! Funktion kann in Stern Klasse gepackt werden
   void resetStar()
   {    
     pixel_x = energy_ball_x;
-    pixel_y = energy_ball_y;
-    //println("kirby collided with star = false");
+    pixel_y = energy_ball_y;    
   }
 }
