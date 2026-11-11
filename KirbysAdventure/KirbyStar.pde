@@ -18,7 +18,7 @@
   @Override
   void shoot()
   {    
-    pixel_y = kirby_y;
+    //pixel_y = kirby_y;
     //println("STAR X || " + pixel_x);
     pixel_x += speed;    
   }
@@ -29,5 +29,17 @@
     energy_ball_collided_with_star = false;
     pixel_x = kirby_x;
     pixel_y = kirby_y;
+  }
+  
+  @Override
+  boolean checkIfOutside()
+  {
+    if (pixel_x > width)
+    {
+      return true;
+    } else
+    {
+      return false;
+    }
   }
 }

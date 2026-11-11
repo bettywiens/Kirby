@@ -40,12 +40,12 @@ class Kirby extends Character
       goDown();
     } else if (key_handler.space_pressed)
     {
-      space_pressed = true;      
+      space_pressed = true;
     } else if (!key_handler.space_pressed && space_pressed)
     {
-      space_pressed = false;      
-      setImageContainer(shooting); // Anderes Bild für wenn Kirby schießt      
-      game_objects.add(new KirbyStar(kirby_x, kirby_y, SHOOTING_STAR_SPEED)); // jedes mal wenn geschossen wird, wird ein neuer Stern erstellt      
+      space_pressed = false;
+      setImageContainer(shooting); // Anderes Bild für wenn Kirby schießt
+      game_objects.add(new KirbyStar(kirby_x, kirby_y, SHOOTING_STAR_SPEED)); // jedes mal wenn geschossen wird, wird ein neuer Stern erstellt
       println("GAME OBJECTS SIZE || " + game_objects.size());
       println(game_objects.get(game_objects.size()-1).getType());
     } else if (key_handler.e_pressed)
@@ -61,12 +61,17 @@ class Kirby extends Character
   @Override
     void update()
   {
+    checkBorders(flying_height);
+    
+    checkCollisionWithStar();
 
+    kirby_x = pixel_x;
+    kirby_y = pixel_y;
   }
 
   void checkCollisionWithStar()
   {
-    CollisionResult collision_result = checkCollision(pixel_x, pixel_y, "kirby");
+    CollisionResult collision_result = checkCollision(pixel_x, pixel_y);
 
     if (collision_result != null)
     {

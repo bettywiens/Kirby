@@ -17,8 +17,8 @@ class Character extends GameObject
   {
   }
 
-  CollisionResult checkCollision(float pixel_x, float pixel_y, String type)
-  { 
+  CollisionResult checkCollision(float pixel_x, float pixel_y)
+  {
     // es wird durch alle game_objects iteriert
     for (int i = 0; i < game_objects.size(); i++)
     {
@@ -35,34 +35,23 @@ class Character extends GameObject
         float object_pixel_x2 = object_pixel_x1 + collision_size;
         float object_pixel_y2 = object_pixel_y1 + collision_size;
 
-        if ( type == "enemy" &&
-          // An der linken Ecke vorbei:
-          (object_pixel_x2 > pixel_x)   &&
-          ((object_pixel_y1 > pixel_y && object_pixel_y1 < pixel_y + size) || (object_pixel_y2 > pixel_y && object_pixel_y2 < pixel_y + size))
+        if (
+          // !!! Kollision wird nicht immer wahrgenommen
+          ((object_pixel_x1 < (pixel_x + kirby_size) && (object_pixel_x1 > pixel_x)) ||
+          (object_pixel_x2 < (pixel_x + kirby_size)) && (object_pixel_x2 > pixel_x)) // Überlappung in der x-Ebene
+          &&
+          (
+          (object_pixel_y1 < pixel_y + kirby_size && object_pixel_y1 > pixel_y) || // Überlappung in der y-Ebene
+          (object_pixel_y2 > pixel_y && object_pixel_y2 < pixel_y + kirby_size) ||
+          (object_pixel_y1 > pixel_y && object_pixel_y2 < pixel_y + kirby_size )
+          )
+
+          
           )
         {
           CollisionResult result = new CollisionResult();
           result.object = collision_object;
           result.type = collision_object.getType();
-          result.id = i;
-          return result;
-        } else if ( type == "kirby" && (
-          // !!! Kollision wird nicht immer wahrgenommen
-          ((object_pixel_x1 < (pixel_x + kirby_size) && (object_pixel_x1 > pixel_x)) || 
-          (object_pixel_x2 < (pixel_x + kirby_size)) && (object_pixel_x2 > pixel_x)) // Überlappung in der x-Ebene 
-          &&
-          (
-          (object_pixel_y1 < pixel_y + kirby_size && object_pixel_y1 > pixel_y) || // Überlappung in der y-Ebene
-          (object_pixel_y2 > pixel_y && object_pixel_y2 < pixel_y + kirby_size) || 
-          (object_pixel_y1 > pixel_y && object_pixel_y2 < pixel_y + kirby_size )
-          )
-          
-          )
-          )
-        {
-          CollisionResult result = new CollisionResult();
-          result.object = collision_object;
-          result.type = collision_object.getType();          
           result.id = i;
           return result;
         }

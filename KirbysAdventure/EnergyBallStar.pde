@@ -43,4 +43,16 @@ class EnergyBallStar extends Star
     pixel_y = energy_ball_y;
     //println("kirby collided with star = false");
   }
+  
+  @Override
+  boolean checkIfOutside()
+  {
+    if (pixel_x < 0)
+    {
+      return true;
+    } else
+    {
+      return false;
+    }
+  }
 }

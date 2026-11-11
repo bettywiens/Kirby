@@ -17,4 +17,9 @@ class Star extends GameObject
   {
   }
   
+  boolean checkIfOutside()
+  {
+    return false;
+  }
+  
 }

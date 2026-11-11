@@ -10,17 +10,11 @@ class EnergyBall extends Character
   String directions_string;
   char[] directions_array;
 
-  EnergyBallStar star_1;
-  EnergyBallStar star_2;
-  EnergyBallStar star_3;
-
-  EnergyBallBurst burst;
-
   int counter = 0;
 
   boolean shooting_star = false;
   boolean shooting_burst = false;
-  
+
   Timer damage_timer;
 
   EnergyBall(float pixel_x, float pixel_y, float speed)
@@ -39,23 +33,7 @@ class EnergyBall extends Character
 
     direction_counter = 0;
 
-    // Energy Ball Stern:
-    star_1 = new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT");
-    star_1.size = star_size;
-    game_objects.add(star_1);
-    star_2 = new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT_UP");
-    star_2.size = star_size;
-    game_objects.add(star_2);
-    star_3 = new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT_DOWN");
-    star_3.size = star_size;
-    game_objects.add(star_3);
-
-    // Burst
-    burst = new EnergyBallBurst(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT");
-    burst.size = star_size;
-    game_objects.add(burst);
-    
-    damage_timer = new Timer(1500);
+    damage_timer = new Timer(500);
   }
 
   void readFile()
@@ -78,7 +56,7 @@ class EnergyBall extends Character
   {
     readFile();
     checkCollisionWithStar();
-    
+
 
     // Wenn Timer vorbei ist bewegt sich EnergyBall abhängig von der direction nach oben oder unten
     if (timer.isFinished())
@@ -103,13 +81,13 @@ class EnergyBall extends Character
           goLeft(1);
         } else if (directions_array[direction_counter] == 's')
         {
-          star_1.resetStar(); // Bevor der Stern geschossen wird, wird seine Position geresettet
-          star_2.resetStar();
-          star_3.resetStar();
+          game_objects.add(new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT_UP"));
+          game_objects.add(new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT"));
+          game_objects.add(new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT_DOWN"));
           shooting_star = true;
         } else if (directions_array[direction_counter] == 'b')
         {
-          burst.resetStar();
+          game_objects.add(new EnergyBallBurst(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT"));
           shooting_burst = true;
         }
         timer.start();
@@ -120,14 +98,13 @@ class EnergyBall extends Character
 
   void checkCollisionWithStar()
   {
-    
-    CollisionResult collision_result = checkCollision(pixel_x, pixel_y, "enemy");
+
+    CollisionResult collision_result = checkCollision(pixel_x, pixel_y);
 
     if (collision_result != null)
     {
       if (collision_result.type == GameTypes.KIRBY_STAR && !energy_ball_collided_with_star)
       {
-        println("ENEMY DAMAGED");
         damage_timer.start();
         energy_ball_collided_with_star = true;
         energy_ball_damaged = true;
@@ -145,40 +122,10 @@ class EnergyBall extends Character
   @Override
     void update()
   {
-    // Wenn Stern außerhalb des Bildschirms ist
-    if (star_1.pixel_x < 0)
-    {
-      shooting_star = false;
-      kirby_collided_with_star = false;
-      star_1.resetStar();
-      star_2.resetStar();
-      star_3.resetStar();
-    }
-    // Wenn Stern geschossen wird
-    if (shooting_star == true)
-    {
-      // Wir schießen erst und zeichnen dann, damit der Stern nicht auf dem Energy Ball selbst gezeichnet wird
-      star_1.shoot();
-      star_2.shoot();
-      star_3.shoot();
-      star_1.drawObject();
-      star_2.drawObject();
-      star_3.drawObject();
-    }
-    // Wenn burst außerhalb des Bildschirms ist
-    if (burst.pixel_x < 0)
-    {
-      shooting_burst = false;
-      burst.resetStar();
-    }
-
-    // Wenn Burst geschossen wird
-    if (shooting_burst == true)
-    {
-
-      burst.shoot();
-      burst.drawObject();
-    }
+    checkBorders(flying_height);
+    
+    energy_ball_x = pixel_x;
+    energy_ball_y = pixel_y;
 
     if (energy_ball_damaged)
     {
@@ -187,7 +134,7 @@ class EnergyBall extends Character
     {
       setImage();
     }
-    
+
     if (damage_timer.isFinished())
     {
       energy_ball_damaged = false;

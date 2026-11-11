@@ -43,4 +43,16 @@ class EnergyBallBurst extends Star
     pixel_x = energy_ball_x;
     pixel_y = energy_ball_y;    
   }
+  
+  @Override
+  boolean checkIfOutside()
+  {
+    if (pixel_x < 0)
+    {
+      return true;
+    } else
+    {
+      return false;
+    }
+  }
 }

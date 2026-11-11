@@ -44,7 +44,6 @@ boolean game_playing = false;
 boolean kirby_won = false;
 
 ArrayList<GameObject> game_objects;
-ArrayList<Star> projectiles;
 
 NormalImage energy_ball_image;
 NormalImage kirby_image;
@@ -106,9 +105,8 @@ void setup()
   // Leben:
   lives = new Lives(690, kirby_health_y + 23, 20, "health/numbers/");
 
-  menu = new Menu(0, 0, 0);
-  
-  projectiles = new ArrayList<Star>();
+  // Menü:
+  menu = new Menu(0, 0, 0);   
 }
 
 void draw()
@@ -156,40 +154,28 @@ void firstEnemy()
     
     GameObject object = game_objects.get(i);
     
-    if (object instanceof KirbyStar)
+    if (object instanceof Character)
     {
-      KirbyStar projectile = (KirbyStar) object;      
+      Character character = (Character) object;
+      character.update();
+      character.drawObject();
+      character.move();      
+    }    
+    
+    if (object instanceof Star)
+    {
+      Star projectile = (Star) object;      
       projectile.shoot();
-      projectile.drawObject();
-      
-      if (projectile.pixel_x > width)
-      {
-        game_objects.remove(projectile);        
-      }
-    }
-  }
-  
-  updateKirby();  
-  kirby.update();
-  kirby.checkCollisionWithStar();
-  kirby.drawObject();  
-  kirby.move();
-  kirby.checkCollisionWithStar();
-  kirby.checkBorders(kirby.flying_height);
-  // HitBoxen von Projektilen:
-  // fill(255,0,0);
-  // rect(projectile.pixel_x, projectile.pixel_y, star_size, star_size); // KIRBY_STAR
-  //rect(energy_ball.burst.pixel_x, energy_ball.burst.pixel_y, star_size, star_size); // BURST
+      projectile.drawObject();      
+      // Hitboxen von Projektilen:
+      //fill(255,0,0);
+      //rect(projectile.pixel_x, projectile.pixel_y, star_size, star_size);      
+    }  
+    
+  }   
 
-  updateEnergyBall(); 
-  energy_ball.drawObject();
-  energy_ball.update();
   sky_background.drawStats();
-  energy_ball.move();  
-  energy_ball.checkBorders(energy_ball.flying_height);
-
-  enemy_health.drawObject();
-  kirby_health.drawObject();
+  
   lives.showLives(kirby_lives);
 }
 
@@ -229,18 +215,6 @@ void resetGame(boolean resetLives) //
   lives = new Lives(690, kirby_health_y + 23, 20, "health/numbers/");
 
   menu = new Menu(0, 0, 0);
-}
-
-void updateKirby() // ??
-{
-  kirby_x = kirby.pixel_x;
-  kirby_y = kirby.pixel_y;
-}
-
-void updateEnergyBall() // ??
-{
-  energy_ball_x = energy_ball.pixel_x;
-  energy_ball_y = energy_ball.pixel_y;
 }
 
 void keyPressed()

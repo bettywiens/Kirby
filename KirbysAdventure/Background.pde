@@ -35,6 +35,8 @@
   void drawStats()
   {
     image(stats_bar, 0, height - stats_bar_height, width, stats_bar_height);
+    enemy_health.drawObject();
+    kirby_health.drawObject();
   }
   
   void bewege()
