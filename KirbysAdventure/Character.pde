@@ -22,7 +22,8 @@ class Character extends GameObject
     // es wird durch alle game_objects iteriert
     for (int i = 0; i < game_objects.size(); i++)
     {
-      GameObject collision_object = game_objects.get(i);      
+      GameObject collision_object = game_objects.get(i);      // Liste anpassen
+      println(game_objects.size());
 
       float collision_size = collision_object.size;
 

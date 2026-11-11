@@ -20,6 +20,8 @@ class EnergyBall extends Character
 
   boolean shooting_star = false;
   boolean shooting_burst = false;
+  
+  Timer damage_timer;
 
   EnergyBall(float pixel_x, float pixel_y, float speed)
   {
@@ -52,6 +54,8 @@ class EnergyBall extends Character
     burst = new EnergyBallBurst(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT");
     burst.size = star_size;
     game_objects.add(burst);
+    
+    damage_timer = new Timer(1500);
   }
 
   void readFile()
@@ -74,6 +78,7 @@ class EnergyBall extends Character
   {
     readFile();
     checkCollisionWithStar();
+    
 
     // Wenn Timer vorbei ist bewegt sich EnergyBall abhängig von der direction nach oben oder unten
     if (timer.isFinished())
@@ -115,12 +120,15 @@ class EnergyBall extends Character
 
   void checkCollisionWithStar()
   {
+    
     CollisionResult collision_result = checkCollision(pixel_x, pixel_y, "enemy");
 
     if (collision_result != null)
     {
       if (collision_result.type == GameTypes.KIRBY_STAR && !energy_ball_collided_with_star)
       {
+        println("ENEMY DAMAGED");
+        damage_timer.start();
         energy_ball_collided_with_star = true;
         energy_ball_damaged = true;
         health-=2;
@@ -178,6 +186,12 @@ class EnergyBall extends Character
     } else
     {
       setImage();
+    }
+    
+    if (damage_timer.isFinished())
+    {
+      energy_ball_damaged = false;
+      energy_ball_collided_with_star = false;
     }
   }
 

@@ -30,7 +30,7 @@ float star_size;
 
 float lower_border;
 
-int kirby_lives = 1;
+int kirby_lives = 5;
 
 boolean energy_ball_collided_with_star = false;
 boolean kirby_collided_with_star = false;
@@ -44,6 +44,7 @@ boolean game_playing = false;
 boolean kirby_won = false;
 
 ArrayList<GameObject> game_objects;
+ArrayList<Star> projectiles;
 
 NormalImage energy_ball_image;
 NormalImage kirby_image;
@@ -89,12 +90,7 @@ void setup()
   game_objects.add(kirby);
   kirby_x = kirby.pixel_x;
   kirby_y = kirby.pixel_y;
-
-  // Kirbys Stern:
-  kirby_star = new KirbyStar(kirby_x, kirby_y, SHOOTING_STAR_SPEED);
-  kirby_star.size = star_image.image_height * 2;
-  game_objects.add(kirby_star);
-  kirby_health = new KirbyHealth(kirby_health_x, kirby_health_y, 10); //! size wird hier nicht gebraucht vielleicht auf Klassen beschränken wo es gebraucht wird
+  kirby_health = new KirbyHealth(kirby_health_x, kirby_health_y, 10); //! size wird hier nicht gebraucht vielleicht auf Klassen beschränken wo es gebraucht wird  
 
   // Energy Ball:
   energy_ball = new EnergyBall (600, 200, ENERGY_BALL_SPEED);
@@ -111,6 +107,8 @@ void setup()
   lives = new Lives(690, kirby_health_y + 23, 20, "health/numbers/");
 
   menu = new Menu(0, 0, 0);
+  
+  projectiles = new ArrayList<Star>();
 }
 
 void draw()
@@ -148,10 +146,29 @@ void draw()
 
 void firstEnemy()
 {
+  
   sky_background.drawing();
   sky_background.bewege();
   sky_background.drawStats();
 
+  for (int i = 0; i < game_objects.size(); i++)
+  {
+    
+    GameObject object = game_objects.get(i);
+    
+    if (object instanceof KirbyStar)
+    {
+      KirbyStar projectile = (KirbyStar) object;      
+      projectile.shoot();
+      projectile.drawObject();
+      
+      if (projectile.pixel_x > width)
+      {
+        game_objects.remove(projectile);        
+      }
+    }
+  }
+  
   updateKirby();  
   kirby.update();
   kirby.checkCollisionWithStar();
@@ -159,10 +176,10 @@ void firstEnemy()
   kirby.move();
   kirby.checkCollisionWithStar();
   kirby.checkBorders(kirby.flying_height);
-  rect(energy_ball.star_1.pixel_x, energy_ball.star_1.pixel_y, star_size, star_size); // STAR 1
-  rect(energy_ball.star_2.pixel_x, energy_ball.star_2.pixel_y, star_size, star_size); // STAR 2
-  rect(energy_ball.star_3.pixel_x, energy_ball.star_3.pixel_y, star_size, star_size); // STAR 3
-  rect(energy_ball.burst.pixel_x, energy_ball.burst.pixel_y, star_size, star_size); // BURST
+  // HitBoxen von Projektilen:
+  // fill(255,0,0);
+  // rect(projectile.pixel_x, projectile.pixel_y, star_size, star_size); // KIRBY_STAR
+  //rect(energy_ball.burst.pixel_x, energy_ball.burst.pixel_y, star_size, star_size); // BURST
 
   updateEnergyBall(); 
   energy_ball.drawObject();
@@ -193,12 +210,8 @@ void resetGame(boolean resetLives) //
   game_objects.add(kirby);
   kirby_x = kirby.pixel_x;
   kirby_y = kirby.pixel_y;
-
-  // Kirbys Stern:
-  kirby_star = new KirbyStar(kirby_x, kirby_y, SHOOTING_STAR_SPEED);
-  kirby_star.size = star_image.image_height * 2;
-  game_objects.add(kirby_star);
   kirby_health = new KirbyHealth(kirby_health_x, kirby_health_y, 10); //! size wird hier nicht gebraucht vielleicht auf Klassen beschränken wo es gebraucht wird
+  
 
   // Energy Ball:
   energy_ball = new EnergyBall (600, 200, ENERGY_BALL_SPEED);

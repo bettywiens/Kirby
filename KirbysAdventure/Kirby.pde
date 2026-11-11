@@ -7,7 +7,9 @@ class Kirby extends Character
   float flying_height; // Höhe des Bildes
 
   boolean shooting_star = false;
-  
+
+  boolean space_pressed = false;
+
   int counter = 0;
 
 
@@ -38,15 +40,20 @@ class Kirby extends Character
       goDown();
     } else if (key_handler.space_pressed)
     {
-      setImageContainer(shooting); // Anderes Bild für wenn Kirby schießt
-      kirby_star.resetStar(); // Bevor der Stern geschossen wird, wird seine Position geresettet
-      shooting_star = true;
+      space_pressed = true;      
+    } else if (!key_handler.space_pressed && space_pressed)
+    {
+      space_pressed = false;      
+      setImageContainer(shooting); // Anderes Bild für wenn Kirby schießt      
+      game_objects.add(new KirbyStar(kirby_x, kirby_y, SHOOTING_STAR_SPEED)); // jedes mal wenn geschossen wird, wird ein neuer Stern erstellt      
+      println("GAME OBJECTS SIZE || " + game_objects.size());
+      println(game_objects.get(game_objects.size()-1).getType());
     } else if (key_handler.e_pressed)
     {
-      println("e pressed");
+      //println("e pressed");
       menu_open = true;
     } else if (!key_handler.space_pressed)
-    {      
+    {
       setImage();
     }
   }
@@ -55,44 +62,30 @@ class Kirby extends Character
     void update()
   {
 
-    // Wenn Stern außerhalb des Bildschirms ist
-    if (kirby_star.pixel_x > width)
-    {
-      energy_ball_damaged = false;
-      shooting_star = false;
-      kirby_star.resetStar();
-    }
-    // Wenn Stern geschossen wird
-    if (shooting_star == true)
-    {
-      // Wir schießen erst und zeichnen dann, damit der Stern nicht auf Kirby selbst gezeichnet wird
-      kirby_star.shoot();
-      kirby_star.drawObject();
-    }
   }
 
   void checkCollisionWithStar()
-  {    
-    CollisionResult collision_result = checkCollision(pixel_x, pixel_y, "kirby");    
-    
+  {
+    CollisionResult collision_result = checkCollision(pixel_x, pixel_y, "kirby");
+
     if (collision_result != null)
     {
       if (collision_result.type == GameTypes.ENEMY_STAR)
       {
-        println("!! collided with projectile");
+        //println("!! collided with projectile");
       }
       if (collision_result.type == GameTypes.ENEMY_STAR && !kirby_collided_with_star)
       {
-        println("collision");
+        //println("collision");
         if (health > 0)
         {
           kirby_collided_with_star = true;
           health--;
-          println("HEALTH: " + health);
+          //println("HEALTH: " + health);
           kirby_health.setHealthBar(health);
           if (health == 0 && !live_lost)
           {
-            println("HEALTH = 0");
+            //println("HEALTH = 0");
             kirby_lives--;
             live_lost = true;
             try_again_open = true;
@@ -102,7 +95,7 @@ class Kirby extends Character
       } else if (collision_result.type != GameTypes.ENEMY_STAR) {
         kirby_collided_with_star = false;
       }
-    } else 
+    } else
     {
       kirby_collided_with_star = false;
     }

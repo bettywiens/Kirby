@@ -1,4 +1,4 @@
-class KirbyStar extends Star
+ class KirbyStar extends Star
 {  
   AnimationImage star;    
   
@@ -15,12 +15,15 @@ class KirbyStar extends Star
   }
   
   // Schießt Stern von Kirby aus in Richtung gegner
+  @Override
   void shoot()
-  {
+  {    
     pixel_y = kirby_y;
+    //println("STAR X || " + pixel_x);
     pixel_x += speed;    
   }
   
+  @Override
   void resetStar()
   {
     energy_ball_collided_with_star = false;
