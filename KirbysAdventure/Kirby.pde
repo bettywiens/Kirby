@@ -74,37 +74,27 @@ class Kirby extends Character
 
     if (collision_result != null)
     {
-      if (collision_result.type == GameTypes.ENEMY_STAR)
+      // Wenn Kirby mit einem Stern kollidiert, mit dem er nicht bereits kollidiert ist:
+      if (collision_result.type == GameTypes.ENEMY_STAR && !star_collided_with_kirby.contains(collision_result.id))
       {
-        //println("!! collided with projectile");
-      }
-      if (collision_result.type == GameTypes.ENEMY_STAR && !kirby_collided_with_star)
-      {
-        health_counter++;
-        println("collision" + health_counter);
+        // Wenn noch Healthpunkte vorhanden sind verlieren wir einen
         if (health > 0)
-        {          
-          kirby_collided_with_star = true;
+        {                    
           health--;
           kirby_health.setHealthBar(health);
+          // Wir laden den Stern mit dem wir kollidiert sind in eine Liste, um keine weitere Kollision
+          // mit dem gleichen Stern zu verursachen
+          star_collided_with_kirby.add(collision_result.id); 
           
-          if (health == 0 && !live_lost)
+          if (health == 0 && !live_lost) // Wie kommen wir hier rein?
           {
             global.kirby_lives--;
             live_lost = true;
             try_again_open = true;
           }
-        }
-        // Sobald Kirbys Kollision mit dem Star endet:
-      } else if (collision_result.type != GameTypes.ENEMY_STAR) {
-        println("ZURÜCKGESETZT");
-        kirby_collided_with_star = false;        
+        }       
       }
-    } else
-    {
-      //println("ZURÜCKGESETZT");
-      //kirby_collided_with_star = false;      
-    }
+    } 
   }
 
   // Setzt Kirbys default image

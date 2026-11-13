@@ -22,9 +22,9 @@ class Character extends GameObject
     // es wird durch alle game_objects iteriert
     for (int i = 0; i < game_objects.size(); i++)
     {
-      GameObject collision_object = game_objects.get(i);      // Liste anpassen
-      //println(game_objects.size());
+      GameObject collision_object = game_objects.get(i);      // Liste anpassen      
 
+      // Größe des Objektes welches die Kollision triggert (z.B. Stern der auf Kirby trifft)
       float collision_size = collision_object.size;
 
       if (!collision_object.getType().equals(getType()))
@@ -34,18 +34,16 @@ class Character extends GameObject
 
         float object_pixel_x2 = object_pixel_x1 + collision_size;
         float object_pixel_y2 = object_pixel_y1 + collision_size;
-        
-        //float kirby_size = kirby.size;
-
-        if (
-          // !!! Kollision wird nicht immer wahrgenommen
-          ((object_pixel_x1 < (pixel_x + size) && (object_pixel_x1 > pixel_x)) ||
-          (object_pixel_x2 < (pixel_x + size)) && (object_pixel_x2 > pixel_x)) // Überlappung in der x-Ebene
+                
+        // size: Größe des Objektes welches die Kollision entgegennimmt (z.B. Kirby)
+        if (          
+          ((object_pixel_x1 <= (pixel_x + size) && (object_pixel_x1 >= pixel_x)) ||
+          (object_pixel_x2 <= (pixel_x + size)) && (object_pixel_x2 >= pixel_x)) // Überlappung in der x-Ebene
           &&
           (
-          (object_pixel_y1 < pixel_y + size && object_pixel_y1 > pixel_y) || // Überlappung in der y-Ebene
-          (object_pixel_y2 > pixel_y && object_pixel_y2 < pixel_y + size) ||
-          (object_pixel_y1 > pixel_y && object_pixel_y2 < pixel_y + size )
+          (object_pixel_y1 <= pixel_y + size && object_pixel_y1 >= pixel_y) || // Überlappung in der y-Ebene
+          (object_pixel_y2 >= pixel_y && object_pixel_y2 <= pixel_y + size) ||
+          (object_pixel_y1 >= pixel_y && object_pixel_y2 <= pixel_y + size )
           )
 
           

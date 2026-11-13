@@ -13,6 +13,7 @@ boolean game_playing = false;
 boolean kirby_won = false;
 
 ArrayList<GameObject> game_objects;
+ArrayList<Integer> star_collided_with_kirby;
 
 KeyHandler key_handler;
 Background sky_background;
@@ -38,6 +39,7 @@ void setup()
 
   // Game Objects:
   game_objects = new ArrayList<GameObject>();
+  star_collided_with_kirby = new ArrayList<Integer>();
 
   // Timer:
   timer = new Timer(2); // Timer 10ms
@@ -140,6 +142,7 @@ void resetGame(boolean resetLives) //
 
   // Game Objects:
   game_objects = new ArrayList<GameObject>();
+  star_collided_with_kirby = new ArrayList<Integer>();
 
   resetKirby();
 
@@ -149,6 +152,8 @@ void resetGame(boolean resetLives) //
   lives = new Lives(690, global.kirby_health_y + 23, 20, images.lives_path);
 
   menu = new Menu(0, 0, 0);
+  
+  
 }
 
 void resetKirby()
