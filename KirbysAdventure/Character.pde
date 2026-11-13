@@ -20,9 +20,9 @@ class Character extends GameObject
   CollisionResult checkCollision(float pixel_x, float pixel_y, float size)
   {
     // es wird durch alle game_objects iteriert
-    for (int i = 0; i < game_objects.size(); i++)
+    for (int i = 0; i < global.game_objects.size(); i++)
     {
-      GameObject collision_object = game_objects.get(i);      // Liste anpassen      
+      GameObject collision_object = global.game_objects.get(i);      // Liste anpassen      
 
       // Größe des Objektes welches die Kollision triggert (z.B. Stern der auf Kirby trifft)
       float collision_size = collision_object.size;

@@ -1,12 +1,9 @@
 class EnergyBall extends Character
 {
   AnimationImage flying;
-  NormalImage flying_image;
-  AnimationImage damage;
   float flying_height;
 
   int direction_counter;
-  String directions_path = "C:/Users/bwiens/Documents/GitHub/Kirby/KirbysAdventure/data/enemy/directions/energy_ball_directions.txt";
   String directions_string;
   char[] directions_array;
 
@@ -15,25 +12,25 @@ class EnergyBall extends Character
   boolean shooting_star = false;
   boolean shooting_burst = false;
 
+  Timer enemy_timer;
   Timer damage_timer;
 
   EnergyBall(float pixel_x, float pixel_y, float speed)
   {
     super(GameTypes.ENEMY, pixel_x, pixel_y, speed, global.energy_ball_size, 28);
 
-    flying = new AnimationImage(images.enemy_flying_path, 4, global.ENERGY_BALL_ANIMATION_SPEED);
+    flying = new AnimationImage(images.enemy_flying_path, 4, global.ENERGY_BALL_ANIMATION_SPEED);      
 
-    flying_image = new NormalImage(images.enemy_flying_path + "_1.png");
-
-    damage = new AnimationImage(images.enemy_damage_path, 4, 2);
-
-    this.flying_height = flying_image.image_height;
+    this.flying_height = images.enemy_flying_image.image_height;
 
     setImageContainer(flying);
 
     direction_counter = 0;
 
     damage_timer = new Timer(500);
+    
+    enemy_timer = new Timer(2); // Timer 2ms
+    enemy_timer.start();
   }
 
   void readFile()
@@ -41,7 +38,7 @@ class EnergyBall extends Character
     // Lesen Datei mit Bewegungsinformationen und lagern diese in einem char Array
     try
     {
-      directions_string = Files.readString(Path.of(directions_path));
+      directions_string = Files.readString(Path.of(images.directions_path));
     }
     catch (IOException e)
     {
@@ -59,7 +56,7 @@ class EnergyBall extends Character
 
 
     // Wenn Timer vorbei ist bewegt sich EnergyBall abhängig von der direction nach oben oder unten
-    if (timer.isFinished())
+    if (enemy_timer.isFinished())
     {
       // Wenn der counter die Länge der Datei überschreitet wird er zurückgesetzt
       if (direction_counter >= directions_array.length)
@@ -81,16 +78,16 @@ class EnergyBall extends Character
           goLeft(1);
         } else if (directions_array[direction_counter] == 's')
         {
-          game_objects.add(new EnergyBallStar(pixel_x, pixel_y, global.SHOOTING_ENEMY_SPEED, "LEFT_UP"));
-          game_objects.add(new EnergyBallStar(pixel_x, pixel_y, global.SHOOTING_ENEMY_SPEED, "LEFT"));
-          game_objects.add(new EnergyBallStar(pixel_x, pixel_y, global.SHOOTING_ENEMY_SPEED, "LEFT_DOWN"));
+          global.game_objects.add(new EnergyBallStar(pixel_x, pixel_y, global.SHOOTING_ENEMY_SPEED, "LEFT_UP"));
+          global.game_objects.add(new EnergyBallStar(pixel_x, pixel_y, global.SHOOTING_ENEMY_SPEED, "LEFT"));
+          global.game_objects.add(new EnergyBallStar(pixel_x, pixel_y, global.SHOOTING_ENEMY_SPEED, "LEFT_DOWN"));
           shooting_star = true;
         } else if (directions_array[direction_counter] == 'b')
         {
-          game_objects.add(new EnergyBallBurst(pixel_x, pixel_y, global.SHOOTING_ENEMY_SPEED, "LEFT"));
+          global.game_objects.add(new EnergyBallBurst(pixel_x, pixel_y, global.SHOOTING_ENEMY_SPEED, "LEFT"));
           shooting_burst = true;
         }
-        timer.start();
+        enemy_timer.start();
         direction_counter++;
       }
     }
@@ -104,17 +101,17 @@ class EnergyBall extends Character
     if (collision_result != null)
     {
       //println(collision_result.type);
-      if (collision_result.type == GameTypes.KIRBY_STAR && !energy_ball_collided_with_star)
+      if (collision_result.type == GameTypes.KIRBY_STAR && !global.energy_ball_collided_with_star)
       {
         damage_timer.start();
-        energy_ball_collided_with_star = true;
-        energy_ball_damaged = true;
+        global.energy_ball_collided_with_star = true;
+        global.energy_ball_damaged = true;
         health-=2;
         enemy_health.setHealthBar(health);
         if (health == 0)
         {
-          game_playing = false;
-          kirby_won = true;
+          global.game_playing = false;
+          global.kirby_won = true;
         }
       }
     }
@@ -126,9 +123,9 @@ class EnergyBall extends Character
     checkBorders(flying_height);
     checkCollisionWithStar();
 
-    if (energy_ball_damaged)
+    if (global.energy_ball_damaged)
     {
-      setImageContainer(damage); // Anderes Bild festlegen für, wenn man den Energy Ball trifft
+      setImageContainer(images.enemy_damage); // Anderes Bild festlegen für, wenn man den Energy Ball trifft
     } else
     {
       setImage();
@@ -136,8 +133,8 @@ class EnergyBall extends Character
 
     if (damage_timer.isFinished())
     {
-      energy_ball_damaged = false;
-      energy_ball_collided_with_star = false;
+      global.energy_ball_damaged = false;
+      global.energy_ball_collided_with_star = false;
     }
   }
 

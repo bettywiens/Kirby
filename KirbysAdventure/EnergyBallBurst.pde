@@ -12,7 +12,7 @@ class EnergyBallBurst extends Star
     pixel_x = energy_ball.pixel_x;
     pixel_y = energy_ball.pixel_y;
         
-    burst = new AnimationImage("star/energy_ball/burst/frame", 6, global.STAR_ANIMATION_SPEED);
+    burst = new AnimationImage(images.energy_ball_burst_path, 6, global.STAR_ANIMATION_SPEED);
     
     setImageContainer(burst);    
 

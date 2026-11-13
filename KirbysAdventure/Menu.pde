@@ -2,21 +2,6 @@ class Menu extends GameObject
 {
   boolean enter_pressed = false;
 
-  AnimationImage game_over_background;
-  AnimationImage background;
-  AnimationImage won_background;
-  NormalImage home_background;
-
-
-  NormalImage game_end;
-  NormalImage lives;
-  NormalImage continue_image;
-  NormalImage pointer;
-  NormalImage try_again;
-  NormalImage yes;
-  NormalImage no;
-  NormalImage selector;
-
   float lives_x = 300;
   float lives_y = 120;
   float game_end_y = lives_y + 75;
@@ -27,215 +12,237 @@ class Menu extends GameObject
   float no_x;
   float pointer_x;
   float pointer_y = game_end_y;
+  float menu_lives_x = lives_x + 150;
+  float menu_lives_y = lives_y;
+
+  float selector_x = 82;
   float selector_y;
   float center = width/2;
   float gap = 50;
+  float in_game_menu_x = 300;
+  float in_game_menu_pointer_x = in_game_menu_x - 50;
+  float game_over_pointer_x = center - images.continue_image.image_width - images.pointer.image_width - 30;
+  float game_over_pointer_y = 220;
+  float try_again_lives_x;
+  float try_again_lives_y = lives_y;
 
   Menu(float pixel_x, float pixel_y, float size)
   {
     super(GameTypes.MENU, pixel_x, pixel_y, size);
 
-    game_over_background = new AnimationImage("menu/game_over/frame", 5, 0.1);
-    background = new AnimationImage("menu/background/frame", 7, 0.1);
-    home_background = new NormalImage("menu/home/background.png");
-    won_background = new AnimationImage("menu/won/", 25, 0.2);
-
-    game_end = new NormalImage("menu/game_end.png");
-    lives = new NormalImage("menu/lives.png");
-    continue_image = new NormalImage("menu/continue.png");
-    pointer = new NormalImage("menu/pointer.png");
-    try_again = new NormalImage("menu/try_again.png");
-    yes = new NormalImage("menu/yes.png");
-    no = new NormalImage("menu/no.png");
-    selector = new NormalImage("menu/home/selector.png");
-
-    try_again_x = center - (try_again.image_width);
-    no_x = center + no.image_width;
+    try_again_x = center - (images.try_again.image_width);
+    
+    try_again_lives_x = try_again_x + 150;
+    no_x = center + images.no.image_width;
     pointer_x  = try_again_x - gap;
     selector_y = 350;
   }
-  
+
   // Screen, wenn man gewonnen hat:
   void drawWonScreen()
   {
-    won_background.drawBackgroundImage(0, 0);
+    images.won_background.drawBackgroundImage(0, 0);
     update();
   }
 
   // Screen, wenn man alle Leben verloren hat (GAME OVER):
   void drawGameOver()
   {
-    game_over_background.drawBackgroundImage(0, 0);
-    continue_image.drawImage(center - continue_image.image_width, 220);
-    pointer.drawImage(center-continue_image.image_width-pointer.image_width - 30, 220);
+    images.game_over_background.drawBackgroundImage(0, 0);
+    images.continue_image.drawImage(center - images.continue_image.image_width, 220);
+    images.pointer.drawImage(game_over_pointer_x, game_over_pointer_y);
     update();
   }
-  
+
   // Menü, bei welchem Spiel gestartet wird (HOME SCREEN):
   void drawHomeMenu()
   {
-    home_background.drawBackgroundImage(0, 0); // 350 // 390 // 430
-    selector.drawImage(82, selector_y);
+    images.home_background.drawBackgroundImage(0, 0); // 350 // 390 // 430
+    images.selector.drawImage(selector_x, selector_y);
     update();
   }
 
   // Menü, der im Spiel mit 'e' geöffnet werden kann (IN GAME MENU):
   void drawMenu()
   {
-    background.drawBackgroundImage(0, 0);
-    lives.drawImage(lives_x, lives_y);
-    Lives menu_lives = new Lives(lives_x + 150, lives_y, 20, "menu/numbers/");
+    images.background.drawBackgroundImage(0, 0);
+    images.lives.drawImage(lives_x, lives_y);
+    Lives menu_lives = new Lives(menu_lives_x, menu_lives_y, global.live_size, images.menu_numbers_path);
     menu_lives.showLives(global.kirby_lives);
-    game_end.drawImage(300, game_end_y);
-    continue_image.drawImage(300, continue_y);
-    pointer.drawImage(250, pointer_y);
+    images.game_end.drawImage(in_game_menu_x, game_end_y);
+    images.continue_image.drawImage(in_game_menu_x, continue_y);
+    images.pointer.drawImage(in_game_menu_pointer_x, pointer_y);
     update();
   }
 
   // Menü, wenn man ein Leben verloren hat:
   void drawTryAgain()
   {
-    live_lost = false;
-    background.drawBackgroundImage(0, 0);
-    try_again.drawImage(try_again_x, try_again_y);
-    lives.drawImage(try_again_x, lives_y);
-    Lives menu_lives = new Lives(try_again_x + 150, lives_y, 20, "menu/numbers/");
+    global.live_lost = false;
+    images.background.drawBackgroundImage(0, 0);
+    images.try_again.drawImage(try_again_x, try_again_y);
+    images.lives.drawImage(try_again_x, lives_y);
+    Lives menu_lives = new Lives(try_again_lives_x, try_again_lives_y, global.live_size, images.menu_numbers_path);
     menu_lives.showLives(global.kirby_lives);
-    yes.drawImage(try_again_x, yes_no_y);
-    no.drawImage(no_x, yes_no_y);
-    pointer.drawImage(pointer_x, yes_no_y);
+    images.yes.drawImage(try_again_x, yes_no_y);
+    images.no.drawImage(no_x, yes_no_y);
+    images.pointer.drawImage(pointer_x, yes_no_y);
     update();
   }
 
+  // Wechselt zu den jeweiligen Screens
   void update()
   {
-    // IN-GAME Menü
-    if (menu_open)
+    if (global.menu_open)
     {
-      if (key_handler.up_pressed) // pointer nach oben
+      menuOpen();
+    } else if (global.try_again_open)
+    {
+      tryAgainOpen();
+    } else if (global.home_open)
+    {
+      homeOpen();
+    } else if (global.game_over)
+    {
+      gameOverOpen();
+    } else if (global.kirby_won)
+    {
+      kirbyWonOpen();
+    }
+  }
+
+  void menuOpen()
+  {
+    if (key_handler.up_pressed) // pointer nach oben
+    {
+      if (pointer_y == continue_y)
       {
-        if (pointer_y == continue_y)
-        {
-          pointer_y = game_end_y;
-        }
-      } else if (key_handler.down_pressed) // pointer nach unten
-      {
-        if (pointer_y == game_end_y)
-        {
-          pointer_y = continue_y;
-        }
-      } else if (key_handler.enter_pressed) // auswählen
-      {
-        enter_pressed = true;
-      } else if (!key_handler.enter_pressed && enter_pressed)
-      {
-        enter_pressed = false;
-        // Spiel beenden
-        if (pointer_y == game_end_y)
-        {
-          resetGame(true);
-          game_playing = false;
-          menu_open = false;
-          home_open = true;
-          // Spiel weiterspielen
-        } else if (pointer_y == continue_y)
-        {
-          menu_open = false;
-        }
+        pointer_y = game_end_y;
       }
-      // TRY-AGAIN Menü
-    } else if (try_again_open)
+    } else if (key_handler.down_pressed) // pointer nach unten
     {
-      if (key_handler.left_pressed) // pointer nach links
+      if (pointer_y == game_end_y)
       {
-        if (pointer_x == no_x - gap)
-        {
-          pointer_x = try_again_x - gap;
-        }
-      } else if (key_handler.right_pressed) // pointer nach rechts
-      {
-        if (pointer_x == try_again_x - gap)
-        {
-          pointer_x = no_x - gap;
-        }
-      } else if (key_handler.enter_pressed) // auswählen
-      {
-        enter_pressed = true;
-        // Nicht nochmal versuchen --> Spiel beenden, zurück zum Homescreen
-      } else if (!key_handler.enter_pressed && enter_pressed)
-      {
-        enter_pressed = false;
-        if (pointer_x == no_x - gap)
-        {
-          resetGame(true);
-          game_playing = false;
-          try_again_open = false;
-          home_open = true;
-          // Nochmal versuchen --> Spiel wird neu gestartet
-        } else if (pointer_x == try_again_x - gap)
-        {
-          resetGame(false);
-          try_again_open = false;
-          game_playing = true;
-        }
+        pointer_y = continue_y;
       }
-      // HOME Screen
-    } else if (home_open)
+    } else if (enterPressed()) // auswählen
     {
-      if (key_handler.down_pressed) // Selector nach unten
+      enter_pressed = false;
+      // Spiel beenden
+      if (pointer_y == game_end_y)
       {
-        if (selector_y < 430) {
-          selector_y += 40;
-        }
-      } else if (key_handler.up_pressed) // Selector nach oben
+        global.menu_open = false;
+        endGame();
+        // Spiel weiterspielen
+      } else if (pointer_y == continue_y)
       {
-        if (selector_y > 350)
-        {
-          selector_y -= 40;
-        }
-      } else if (key_handler.e_pressed) // Spiel schließen
-      {
-        exit();
-      } else if (key_handler.enter_pressed) // auswählen
-      {
-        enter_pressed = true;
-      } else if (!key_handler.enter_pressed && enter_pressed)
-      {
-        enter_pressed = false;
-        resetGame(true);
-        home_open = false;
-        game_playing = true;
-      }
-      // GAME OVER Screen
-    } else if (game_over)
-    {
-      // Keine andere Möglichekeit, da man keine Leben mehr hat
-      if (key_handler.enter_pressed) // auswählen
-      {
-        enter_pressed = true;
-      } else if (!key_handler.enter_pressed && enter_pressed)
-      {
-        enter_pressed = false;
-        resetGame(true);
-        game_over = false;
-        game_playing = false;
-        home_open = true;
-      }
-      // WIN Screen
-    } else if (kirby_won)
-    {
-      // Keine andere Möglichekeit, da gewonnen
-      if (key_handler.enter_pressed) // auswählen
-      {
-        enter_pressed = true;
-      } else if (!key_handler.enter_pressed && enter_pressed)
-      {
-        enter_pressed = false;
-        resetGame(true);
-        kirby_won = false;
-        game_playing = false;
-        home_open = true;
+        global.menu_open = false;
       }
     }
+  }
+
+  void tryAgainOpen()
+  {
+    if (key_handler.left_pressed) // pointer nach links
+    {
+      if (pointer_x == no_x - gap)
+      {
+        pointer_x = try_again_x - gap;
+      }
+    } else if (key_handler.right_pressed) // pointer nach rechts
+    {
+      if (pointer_x == try_again_x - gap)
+      {
+        pointer_x = no_x - gap;
+      }
+    } else if (enterPressed())
+    {
+      enter_pressed = false;
+      if (pointer_x == no_x - gap)
+      {
+        global.try_again_open = false;
+        endGame();
+        // Nochmal versuchen --> Spiel wird neu gestartet
+      } else if (pointer_x == try_again_x - gap)
+      {
+        tryAgain();
+      }
+    }
+  }
+
+  void homeOpen()
+  {
+    if (key_handler.down_pressed) // Selector nach unten
+    {
+      if (selector_y < 430) {
+        selector_y += 40;
+      }
+    } else if (key_handler.up_pressed) // Selector nach oben
+    {
+      if (selector_y > 350)
+      {
+        selector_y -= 40;
+      }
+    } else if (key_handler.e_pressed) // Spiel schließen
+    {
+      exit();
+    } else if (enterPressed()) // auswählen
+    {
+      playGame();
+    }
+  }
+
+  void gameOverOpen()
+  {
+    // Keine andere Möglichekeit, da man keine Leben mehr hat
+    if (enterPressed())
+    {
+      enter_pressed = false;
+      global.game_over = false;
+      endGame();
+    }
+  }
+
+  void kirbyWonOpen()
+  {
+    if (enterPressed())
+    {
+      enter_pressed = false;
+      global.kirby_won = false;
+      endGame();
+    }
+  }
+
+  boolean enterPressed()
+  {
+    if (key_handler.enter_pressed)
+    {
+      enter_pressed = true;
+    } else if (!key_handler.enter_pressed && enter_pressed)
+    {
+      return true;
+    }
+    return false;
+  }
+
+  void endGame()
+  {
+    resetGame(true);
+    global.game_playing = false;
+    global.home_open = true;
+  }
+
+  void tryAgain()
+  {
+    resetGame(false);
+    global.try_again_open = false;
+    global.game_playing = true;
+  }
+
+  void playGame()
+  {
+    resetGame(true);
+    global.game_playing = true;
+    global.home_open = false;
   }
 }

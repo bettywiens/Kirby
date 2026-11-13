@@ -12,7 +12,7 @@ class EnergyBallStar extends Star
     pixel_x = energy_ball.pixel_x;
     pixel_y = energy_ball.pixel_y;
     
-    star = new AnimationImage("star/energy_ball/purple_star/star", 8, global.STAR_ANIMATION_SPEED);    
+    star = new AnimationImage(images.enemy_star_path, 8, global.STAR_ANIMATION_SPEED);    
     
     setImageContainer(star);    
 
@@ -40,8 +40,7 @@ class EnergyBallStar extends Star
   void resetStar()
   {    
     pixel_x = energy_ball.pixel_x;
-    pixel_y = energy_ball.pixel_y;
-    //println("kirby collided with star = false");
+    pixel_y = energy_ball.pixel_y;    
   }
   
   @Override

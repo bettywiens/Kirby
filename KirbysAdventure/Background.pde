@@ -1,9 +1,5 @@
  class Background
-{
-  String sky_path = "background/sky.png";
-
-  String stats_bar_path = "background/stats_bar.png";
-
+{ 
   PImage sky_1;
   PImage sky_2;
   PImage stats_bar;
@@ -18,9 +14,9 @@
 
   Background()
   {
-    sky_1 = loadImage(sky_path);
-    sky_2 = loadImage(sky_path);
-    stats_bar = loadImage(stats_bar_path);
+    sky_1 = loadImage(images.sky_path);
+    sky_2 = loadImage(images.sky_path);
+    stats_bar = loadImage(images.stats_bar_path);
 
     stats_bar_height = sky_1.height / 8.5 ;
     sky_height = height - stats_bar_height;
@@ -34,7 +30,7 @@
   
   void drawStats()
   {
-    image(stats_bar, 0, height - stats_bar_height, width, stats_bar_height);
+    image(stats_bar, 0, sky_height, width, stats_bar_height);
     enemy_health.drawObject();
     kirby_health.drawObject();
     lives.showLives(global.kirby_lives);
