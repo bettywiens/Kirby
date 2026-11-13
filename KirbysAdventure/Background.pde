@@ -20,17 +20,18 @@
 
     stats_bar_height = sky_1.height / 8.5 ;
     sky_height = height - stats_bar_height;
+    
   }
 
   void drawing()
   {
-    image(sky_1, sky_1_x, 0, width, sky_height);
-    image(sky_2, sky_2_x, 0, width, sky_height);
+    image(sky_1, sky_1_x, 0, width, height - stats_bar_height);
+    image(sky_2, sky_2_x, 0, width, height - stats_bar_height);
   }
   
   void drawStats()
   {
-    image(stats_bar, 0, sky_height, width, stats_bar_height);
+    image(stats_bar, 0, height - stats_bar_height, width, stats_bar_height);
     enemy_health.drawObject();
     kirby_health.drawObject();
     lives.showLives(global.kirby_lives);

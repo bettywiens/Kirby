@@ -40,9 +40,7 @@ class Kirby extends Character
     {
       space_pressed = false;
       setImageContainer(images.kirby_shooting); // Anderes Bild für wenn Kirby schießt
-      global.game_objects.add(new KirbyStar(pixel_x, pixel_y, global.SHOOTING_STAR_SPEED)); // jedes mal wenn geschossen wird, wird ein neuer Stern erstellt
-      //println("GAME OBJECTS SIZE || " + game_objects.size());
-      //println(game_objects.get(game_objects.size()-1).getType());
+      global.game_objects.add(new KirbyStar(pixel_x, pixel_y, global.SHOOTING_STAR_SPEED)); // jedes mal wenn geschossen wird, wird ein neuer Stern erstellt      
     } else if (key_handler.e_pressed)
     {
       //println("e pressed");

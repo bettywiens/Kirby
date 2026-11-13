@@ -1,6 +1,6 @@
 class GlobalVariables
 {
-  int SCALE;
+  float SCALE = 2;
   float STAR_ANIMATION_SPEED;
   float ENERGY_BALL_ANIMATION_SPEED;
 
@@ -10,6 +10,8 @@ class GlobalVariables
   int SHOOTING_STAR_SPEED;
   int SHOOTING_ENEMY_SPEED;
   int ENERGY_BALL_SPEED;
+  
+
   
   boolean energy_ball_collided_with_star = false;
   boolean kirby_collided_with_star = false;
@@ -34,7 +36,7 @@ class GlobalVariables
   float kirby_lives_x;
   float kirby_lives_y;
   
-  int live_number = 2;
+  int live_number = 5;
   
   float live_size = 20;
 
@@ -52,8 +54,8 @@ class GlobalVariables
 
   GlobalVariables()
   {
-    kirby_start_x = 100;
-    kirby_start_y = 200;
+    kirby_start_x = width * 0.1;
+    kirby_start_y = height / 2;
     kirby_lives = 5;
 
     kirby_health_x = 200;
@@ -62,12 +64,11 @@ class GlobalVariables
     kirby_lives_x = 690;
     kirby_lives_y = sky_background.sky_height + (0.39 * sky_background.stats_bar_height);
 
-    energy_ball_start_x = 600;
-    energy_ball_start_y = 200;
+    energy_ball_start_x = width - (width * 0.2);
+    energy_ball_start_y = height / 2;
     energy_ball_health_x = 200;
     energy_ball_health_y = sky_background.sky_height + (0.53 * sky_background.stats_bar_height);
-
-    SCALE = 2;
+    
     STAR_ANIMATION_SPEED = 0.8;
     ENERGY_BALL_ANIMATION_SPEED = 1;
 
@@ -87,6 +88,11 @@ class GlobalVariables
 
     game_objects = new ArrayList<GameObject>();
     star_collided_with_kirby = new ArrayList<Integer>();
+  }
+  
+  void setScale(float scale)
+  {
+    this.SCALE = scale;
   }
   
   void init()

@@ -1,6 +1,9 @@
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+int size_x = 800;
+int size_y = 600;
+
 KeyHandler key_handler;
 Background sky_background;
 Kirby kirby;
@@ -16,15 +19,17 @@ GlobalVariables global;
 void setup()
 {
   size(800, 600);
+  windowResize(size_x, size_y);
 
   key_handler = new KeyHandler();
   images = new Images();
   sky_background = new Background();
-  global = new GlobalVariables();  
+  global = new GlobalVariables();
+
 
   // Menü:
   menu = new Menu(0, 0, 0);
-  
+
   // Kirby:
   kirby = new Kirby(global.kirby_start_x, global.kirby_start_y, global.KIRBY_SPEED);
   global.game_objects.add(kirby);
@@ -39,20 +44,15 @@ void setup()
 }
 
 void draw()
-{
-  // IN-GAME MENÜ
+{   
+  checkScreenSize(size_y);
+  
   if (global.kirby_lives == 0)
   {
-    global.game_playing = false;
-    global.game_over = true;
     menu.drawGameOver();
   } else if (global.menu_open)
   {
     menu.drawMenu();
-    // GAME-OVER SCREEN
-  } else if (global.game_over)
-  {
-    menu.drawGameOver();
     // TRY_AGAIN SCREEN
   } else if (global.try_again_open)
   {
@@ -76,10 +76,10 @@ void firstEnemy()
 {
 
   drawBackground();
-  
+
   // Hitboxen Kirby und EnergyBall:
-  //fill(0, 255, 0);
-  //rect(kirby.pixel_x, kirby.pixel_y, global.kirby_size, global.kirby_size);
+  fill(0, 255, 0);
+  rect(kirby.pixel_x, kirby.pixel_y, global.kirby_size, global.kirby_size);
   //fill(0, 0,255);
   //rect(energy_ball.pixel_x, energy_ball.pixel_y, global.energy_ball_size, global.energy_ball_size);
 
@@ -110,13 +110,27 @@ void firstEnemy()
   sky_background.drawStats();
 }
 
+void checkScreenSize(float size_y)
+{
+  if (size_y < 600)
+  {
+    global.setScale(1.5);
+  } else if (size_y < 500)
+  {
+    global.setScale(1.4);
+  } else if (size_y > 600)
+  {
+    global.setScale(2.3);
+  }
+}
+
 void resetGame(boolean resetLives) //
 {
   if (resetLives)
   {
     global.resetLives();
   }
-  
+
   global.init();
 
   resetKirby();
@@ -127,8 +141,6 @@ void resetGame(boolean resetLives) //
   lives = new Lives(global.kirby_lives_x, global.kirby_lives_y, 20, images.lives_path);
 
   menu = new Menu(0, 0, 0);
-  
-  
 }
 
 void resetKirby()
@@ -142,10 +154,10 @@ void resetKirby()
 void resetEnergyBall()
 {
   // Energy Ball:
-  energy_ball = new EnergyBall (global.energy_ball_start_x, global.energy_ball_start_y, global.ENERGY_BALL_SPEED);  
+  energy_ball = new EnergyBall (global.energy_ball_start_x, global.energy_ball_start_y, global.ENERGY_BALL_SPEED);
   global.game_objects.add(energy_ball);
-  
-  enemy_health = new EnemyHealth(global.energy_ball_health_x, global.energy_ball_health_y, 300); 
+
+  enemy_health = new EnemyHealth(global.energy_ball_health_x, global.energy_ball_health_y, 300);
   global.energy_ball_damaged = false;
 }
 

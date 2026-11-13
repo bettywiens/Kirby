@@ -2,39 +2,41 @@ class Menu extends GameObject
 {
   boolean enter_pressed = false;
 
-  float lives_x = 300;
-  float lives_y = 120;
-  float game_end_y = lives_y + 75;
-  float continue_y = game_end_y + 75;
+  float lives_y = 0.25 * height;
   float try_again_x;
   float try_again_y = lives_y + 60;
   float yes_no_y = try_again_y + 60;
   float no_x;
   float pointer_x;
-  float pointer_y = game_end_y;
-  float menu_lives_x = lives_x + 150;
   float menu_lives_y = lives_y;
 
   float selector_x = 82;
   float selector_y;
   float center = width/2;
-  float gap = 50;
-  float in_game_menu_x = 300;
+  float gap = global.SCALE * 30;
+  float small_gap = global.SCALE * 17;
+  float in_game_menu_x = center - (images.lives.image_width * 1.4);
+  float lives_x = in_game_menu_x;
+  float menu_lives_x = lives_x + (images.lives.image_width * global.SCALE) + (gap * 0.5) ;
   float in_game_menu_pointer_x = in_game_menu_x - 50;
-  float game_over_pointer_x = center - images.continue_image.image_width - images.pointer.image_width - 30;
-  float game_over_pointer_y = 220;
+  float game_over_pointer_x = center - images.continue_image.image_width - images.pointer.image_width - 30;  
   float try_again_lives_x;
   float try_again_lives_y = lives_y;
+  float game_end_y = lives_y + gap;
+  float continue_y = game_end_y + gap;
+  float pointer_y = game_end_y;
+  float game_over_continue_x = center - images.continue_image.image_width;
+  float game_over_continue_y = height * 0.4;
 
   Menu(float pixel_x, float pixel_y, float size)
   {
     super(GameTypes.MENU, pixel_x, pixel_y, size);
 
     try_again_x = center - (images.try_again.image_width);
-    
-    try_again_lives_x = try_again_x + 150;
+
+    try_again_lives_x = try_again_x + (images.lives.image_width * global.SCALE) + (small_gap) ;
     no_x = center + images.no.image_width;
-    pointer_x  = try_again_x - gap;
+    pointer_x  = try_again_x - small_gap;
     selector_y = 350;
   }
 
@@ -48,9 +50,12 @@ class Menu extends GameObject
   // Screen, wenn man alle Leben verloren hat (GAME OVER):
   void drawGameOver()
   {
+    global.game_playing = false;
+    global.game_over = true;
+    global.live_lost = false;
     images.game_over_background.drawBackgroundImage(0, 0);
-    images.continue_image.drawImage(center - images.continue_image.image_width, 220);
-    images.pointer.drawImage(game_over_pointer_x, game_over_pointer_y);
+    images.continue_image.drawImage(game_over_continue_x, game_over_continue_y);
+    images.pointer.drawImage(game_over_pointer_x, game_over_continue_y);
     update();
   }
 
@@ -145,25 +150,25 @@ class Menu extends GameObject
   {
     if (key_handler.left_pressed) // pointer nach links
     {
-      if (pointer_x == no_x - gap)
+      if (pointer_x == no_x - small_gap)
       {
-        pointer_x = try_again_x - gap;
+        pointer_x = try_again_x - small_gap;
       }
     } else if (key_handler.right_pressed) // pointer nach rechts
     {
-      if (pointer_x == try_again_x - gap)
+      if (pointer_x == try_again_x - small_gap)
       {
-        pointer_x = no_x - gap;
+        pointer_x = no_x - small_gap;
       }
     } else if (enterPressed())
     {
       enter_pressed = false;
-      if (pointer_x == no_x - gap)
+      if (pointer_x == no_x - small_gap)
       {
         global.try_again_open = false;
         endGame();
         // Nochmal versuchen --> Spiel wird neu gestartet
-      } else if (pointer_x == try_again_x - gap)
+      } else if (pointer_x == try_again_x - small_gap)
       {
         tryAgain();
       }
@@ -196,7 +201,7 @@ class Menu extends GameObject
   {
     // Keine andere Möglichekeit, da man keine Leben mehr hat
     if (enterPressed())
-    {
+    {      
       enter_pressed = false;
       global.game_over = false;
       endGame();
