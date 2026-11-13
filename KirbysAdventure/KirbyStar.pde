@@ -4,12 +4,12 @@
   
   KirbyStar(float pixel_x, float pixel_y, float speed)
   {
-    super(pixel_x, pixel_y, speed, GameTypes.KIRBY_STAR, star_size);
+    super(pixel_x, pixel_y, speed, GameTypes.KIRBY_STAR, global.star_size);
     
-    kirby_x = pixel_x;
-    kirby_y = pixel_y;
+    kirby.pixel_x = pixel_x;
+    kirby.pixel_y = pixel_y;
     
-    star = new AnimationImage("star/kirby/star", 8, STAR_ANIMATION_SPEED);
+    star = new AnimationImage("star/kirby/star", 8, global.STAR_ANIMATION_SPEED);
     
     setImageContainer(star);    
   }
@@ -27,8 +27,8 @@
   void resetStar()
   {
     energy_ball_collided_with_star = false;
-    pixel_x = kirby_x;
-    pixel_y = kirby_y;
+    pixel_x = kirby.pixel_x;
+    pixel_y = kirby.pixel_y;
   }
   
   @Override

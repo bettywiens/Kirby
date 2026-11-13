@@ -13,7 +13,7 @@ class NormalImage implements ImageContainer
 
   void drawImage(float x, float y)
   {
-    image(image, x, y, image.width * SCALE, image.height * SCALE);
+    image(image, x, y, image.width * global.SCALE, image.height * global.SCALE);
   }
 
   void drawBackgroundImage(float x, float y)

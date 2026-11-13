@@ -6,13 +6,13 @@ class EnergyBallStar extends Star
   
   EnergyBallStar(float pixel_x, float pixel_y, float speed, String direction)
   {
-    super(pixel_x, pixel_y, speed, GameTypes.ENEMY_STAR, star_size);
+    super(pixel_x, pixel_y, speed, GameTypes.ENEMY_STAR, global.star_size);
     
     this.direction = direction;
-    energy_ball_x = pixel_x;
-    energy_ball_y = pixel_y;
+    pixel_x = energy_ball.pixel_x;
+    pixel_y = energy_ball.pixel_y;
     
-    star = new AnimationImage("star/energy_ball/purple_star/star", 8, STAR_ANIMATION_SPEED);    
+    star = new AnimationImage("star/energy_ball/purple_star/star", 8, global.STAR_ANIMATION_SPEED);    
     
     setImageContainer(star);    
 
@@ -39,8 +39,8 @@ class EnergyBallStar extends Star
   
   void resetStar()
   {    
-    pixel_x = energy_ball_x;
-    pixel_y = energy_ball_y;
+    pixel_x = energy_ball.pixel_x;
+    pixel_y = energy_ball.pixel_y;
     //println("kirby collided with star = false");
   }
   

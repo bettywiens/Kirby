@@ -85,7 +85,7 @@ class Menu extends GameObject
     background.drawBackgroundImage(0, 0);
     lives.drawImage(lives_x, lives_y);
     Lives menu_lives = new Lives(lives_x + 150, lives_y, 20, "menu/numbers/");
-    menu_lives.showLives(kirby_lives);
+    menu_lives.showLives(global.kirby_lives);
     game_end.drawImage(300, game_end_y);
     continue_image.drawImage(300, continue_y);
     pointer.drawImage(250, pointer_y);
@@ -100,7 +100,7 @@ class Menu extends GameObject
     try_again.drawImage(try_again_x, try_again_y);
     lives.drawImage(try_again_x, lives_y);
     Lives menu_lives = new Lives(try_again_x + 150, lives_y, 20, "menu/numbers/");
-    menu_lives.showLives(kirby_lives);
+    menu_lives.showLives(global.kirby_lives);
     yes.drawImage(try_again_x, yes_no_y);
     no.drawImage(no_x, yes_no_y);
     pointer.drawImage(pointer_x, yes_no_y);

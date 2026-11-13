@@ -17,13 +17,13 @@ class Character extends GameObject
   {
   }
 
-  CollisionResult checkCollision(float pixel_x, float pixel_y)
+  CollisionResult checkCollision(float pixel_x, float pixel_y, float size)
   {
     // es wird durch alle game_objects iteriert
     for (int i = 0; i < game_objects.size(); i++)
     {
       GameObject collision_object = game_objects.get(i);      // Liste anpassen
-      println(game_objects.size());
+      //println(game_objects.size());
 
       float collision_size = collision_object.size;
 
@@ -34,16 +34,18 @@ class Character extends GameObject
 
         float object_pixel_x2 = object_pixel_x1 + collision_size;
         float object_pixel_y2 = object_pixel_y1 + collision_size;
+        
+        //float kirby_size = kirby.size;
 
         if (
           // !!! Kollision wird nicht immer wahrgenommen
-          ((object_pixel_x1 < (pixel_x + kirby_size) && (object_pixel_x1 > pixel_x)) ||
-          (object_pixel_x2 < (pixel_x + kirby_size)) && (object_pixel_x2 > pixel_x)) // Überlappung in der x-Ebene
+          ((object_pixel_x1 < (pixel_x + size) && (object_pixel_x1 > pixel_x)) ||
+          (object_pixel_x2 < (pixel_x + size)) && (object_pixel_x2 > pixel_x)) // Überlappung in der x-Ebene
           &&
           (
-          (object_pixel_y1 < pixel_y + kirby_size && object_pixel_y1 > pixel_y) || // Überlappung in der y-Ebene
-          (object_pixel_y2 > pixel_y && object_pixel_y2 < pixel_y + kirby_size) ||
-          (object_pixel_y1 > pixel_y && object_pixel_y2 < pixel_y + kirby_size )
+          (object_pixel_y1 < pixel_y + size && object_pixel_y1 > pixel_y) || // Überlappung in der y-Ebene
+          (object_pixel_y2 > pixel_y && object_pixel_y2 < pixel_y + size) ||
+          (object_pixel_y1 > pixel_y && object_pixel_y2 < pixel_y + size )
           )
 
           
@@ -65,9 +67,9 @@ class Character extends GameObject
     if (pixel_y <= 0 + character_height)
     {
       pixel_y = 0 + character_height;
-    } else if (pixel_y >= lower_border - image_height * SCALE)
+    } else if (pixel_y >= global.lower_border - image_height * global.SCALE)
     {
-      pixel_y = lower_border - image_height * SCALE;
+      pixel_y = global.lower_border - image_height * global.SCALE;
     }
   }
 

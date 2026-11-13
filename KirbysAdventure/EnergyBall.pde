@@ -19,13 +19,13 @@ class EnergyBall extends Character
 
   EnergyBall(float pixel_x, float pixel_y, float speed)
   {
-    super(GameTypes.ENEMY, pixel_x, pixel_y, speed, energy_ball_size, 28);
+    super(GameTypes.ENEMY, pixel_x, pixel_y, speed, global.energy_ball_size, 28);
 
-    flying = new AnimationImage("enemy/flying/frame", 4, ENERGY_BALL_ANIMATION_SPEED);
+    flying = new AnimationImage(images.enemy_flying_path, 4, global.ENERGY_BALL_ANIMATION_SPEED);
 
-    flying_image = new NormalImage("enemy/flying/frame_1.png");
+    flying_image = new NormalImage(images.enemy_flying_path + "_1.png");
 
-    damage = new AnimationImage("enemy/damage/frame", 4, 2);
+    damage = new AnimationImage(images.enemy_damage_path, 4, 2);
 
     this.flying_height = flying_image.image_height;
 
@@ -81,13 +81,13 @@ class EnergyBall extends Character
           goLeft(1);
         } else if (directions_array[direction_counter] == 's')
         {
-          game_objects.add(new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT_UP"));
-          game_objects.add(new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT"));
-          game_objects.add(new EnergyBallStar(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT_DOWN"));
+          game_objects.add(new EnergyBallStar(pixel_x, pixel_y, global.SHOOTING_ENEMY_SPEED, "LEFT_UP"));
+          game_objects.add(new EnergyBallStar(pixel_x, pixel_y, global.SHOOTING_ENEMY_SPEED, "LEFT"));
+          game_objects.add(new EnergyBallStar(pixel_x, pixel_y, global.SHOOTING_ENEMY_SPEED, "LEFT_DOWN"));
           shooting_star = true;
         } else if (directions_array[direction_counter] == 'b')
         {
-          game_objects.add(new EnergyBallBurst(energy_ball_x, energy_ball_y, SHOOTING_ENEMY_SPEED, "LEFT"));
+          game_objects.add(new EnergyBallBurst(pixel_x, pixel_y, global.SHOOTING_ENEMY_SPEED, "LEFT"));
           shooting_burst = true;
         }
         timer.start();
@@ -99,10 +99,11 @@ class EnergyBall extends Character
   void checkCollisionWithStar()
   {
 
-    CollisionResult collision_result = checkCollision(pixel_x, pixel_y);
+    CollisionResult collision_result = checkCollision(pixel_x, pixel_y, size);
 
     if (collision_result != null)
     {
+      //println(collision_result.type);
       if (collision_result.type == GameTypes.KIRBY_STAR && !energy_ball_collided_with_star)
       {
         damage_timer.start();
@@ -123,9 +124,7 @@ class EnergyBall extends Character
     void update()
   {
     checkBorders(flying_height);
-    
-    energy_ball_x = pixel_x;
-    energy_ball_y = pixel_y;
+    checkCollisionWithStar();
 
     if (energy_ball_damaged)
     {

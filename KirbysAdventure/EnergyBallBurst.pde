@@ -6,13 +6,13 @@ class EnergyBallBurst extends Star
   
   EnergyBallBurst(float pixel_x, float pixel_y, float speed, String direction)
   {
-    super(pixel_x, pixel_y, speed, GameTypes.ENEMY_STAR, star_size);
+    super(pixel_x, pixel_y, speed, GameTypes.ENEMY_STAR, global.star_size);
     
     this.direction = direction;
-    energy_ball_x = pixel_x;
-    energy_ball_y = pixel_y;
+    pixel_x = energy_ball.pixel_x;
+    pixel_y = energy_ball.pixel_y;
         
-    burst = new AnimationImage("star/energy_ball/burst/frame", 6, STAR_ANIMATION_SPEED);
+    burst = new AnimationImage("star/energy_ball/burst/frame", 6, global.STAR_ANIMATION_SPEED);
     
     setImageContainer(burst);    
 
@@ -40,8 +40,8 @@ class EnergyBallBurst extends Star
 // !!! Funktion kann in Stern Klasse gepackt werden
   void resetStar()
   {    
-    pixel_x = energy_ball_x;
-    pixel_y = energy_ball_y;    
+    pixel_x = energy_ball.pixel_x;
+    pixel_y = energy_ball.pixel_y;    
   }
   
   @Override

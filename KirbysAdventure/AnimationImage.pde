@@ -29,7 +29,7 @@ class AnimationImage implements ImageContainer
       image_number = 0;
     }
 
-    image(images[image_number], x, y, images[image_number].width * SCALE, images[image_number].height * SCALE);
+    image(images[image_number], x, y, images[image_number].width * global.SCALE, images[image_number].height * global.SCALE);
   }
 
   void drawBackgroundImage(float x, float y)

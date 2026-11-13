@@ -37,12 +37,13 @@
     image(stats_bar, 0, height - stats_bar_height, width, stats_bar_height);
     enemy_health.drawObject();
     kirby_health.drawObject();
+    lives.showLives(global.kirby_lives);
   }
   
   void bewege()
   {
-    sky_1_x -= SPEED;
-    sky_2_x -= SPEED;
+    sky_1_x -= global.SPEED;
+    sky_2_x -= global.SPEED;
     
     if (sky_1_x <= -width)
     {
