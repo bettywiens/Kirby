@@ -39,6 +39,7 @@ class EnergyBall extends Character
     try
     {
       directions_string = Files.readString(Path.of(images.directions_path));
+      
     }
     catch (IOException e)
     {

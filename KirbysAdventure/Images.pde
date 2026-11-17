@@ -99,7 +99,7 @@ class Images
     kirby_bar_path = "health/kirby/bar_";
     kirby_star_path = "star/kirby/star";
 
-    directions_path = "C:/Users/bwiens/Documents/GitHub/Kirby/KirbysAdventure/data/enemy/directions/energy_ball_directions.txt";
+    directions_path = "/Users/bettywiens/Documents/GitHub/Kirby/KirbysAdventure/data/enemy/directions/energy_ball_directions.txt";
 
     menu_numbers_path = "menu/numbers/";
   }
