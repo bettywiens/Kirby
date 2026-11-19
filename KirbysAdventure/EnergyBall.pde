@@ -1,58 +1,21 @@
-class EnergyBall extends Character
+class EnergyBall extends Enemy
 {
   AnimationImage flying;
   float flying_height;
 
-  int direction_counter;
-  String directions_string;
-  char[] directions_array;
-
-  int counter = 0;
-
-  boolean shooting_star = false;
-  boolean shooting_burst = false;
-
-  Timer enemy_timer;
-  Timer damage_timer;
-
-  EnergyBall(float pixel_x, float pixel_y, float speed)
+  EnergyBall(float pixel_x, float pixel_y)
   {
-    super(GameTypes.ENEMY, pixel_x, pixel_y, speed, global.energy_ball_size, 28);
+    super(pixel_x, pixel_y, global.ENERGY_BALL_SPEED, global.energy_ball_size, 28);
 
-    flying = new AnimationImage(images.enemy_flying_path, 4, global.ENERGY_BALL_ANIMATION_SPEED);      
+    flying = new AnimationImage(images.enemy_flying_path, 4, global.ENERGY_BALL_ANIMATION_SPEED);
 
     this.flying_height = images.enemy_flying_image.image_height;
-
-    setImageContainer(flying);
-
-    direction_counter = 0;
-
-    damage_timer = new Timer(500);
-    
-    enemy_timer = new Timer(2); // Timer 2ms
-    enemy_timer.start();
-  }
-
-  void readFile()
-  {
-    // Lesen Datei mit Bewegungsinformationen und lagern diese in einem char Array
-    try
-    {
-      directions_string = Files.readString(Path.of(images.directions_path));
-      
-    }
-    catch (IOException e)
-    {
-      println("File not found");
-    }
-
-    directions_array = directions_string.toCharArray();
   }
 
   @Override
     void move()
   {
-    readFile();
+    readFile(images.directions_path);
     checkCollisionWithStar();
 
 
@@ -94,98 +57,9 @@ class EnergyBall extends Character
     }
   }
 
-  void checkCollisionWithStar()
-  {
-
-    CollisionResult collision_result = checkCollision(pixel_x, pixel_y, size);
-
-    if (collision_result != null)
-    {
-      //println(collision_result.type);
-      if (collision_result.type == GameTypes.KIRBY_STAR && !global.energy_ball_collided_with_star)
-      {
-        damage_timer.start();
-        global.energy_ball_collided_with_star = true;
-        global.energy_ball_damaged = true;
-        health-=2;
-        enemy_health.setHealthBar(health);
-        if (health == 0)
-        {
-          global.game_playing = false;
-          global.kirby_won = true;
-        }
-      }
-    }
-  }
-
   @Override
     void update()
   {
-    checkBorders(flying_height);
-    checkCollisionWithStar();
-
-    if (global.energy_ball_damaged)
-    {
-      setImageContainer(images.enemy_damage); // Anderes Bild festlegen für, wenn man den Energy Ball trifft
-    } else
-    {
-      setImage();
-    }
-
-    if (damage_timer.isFinished())
-    {
-      global.energy_ball_damaged = false;
-      global.energy_ball_collided_with_star = false;
-    }
-  }
-
-
-  void setImage()
-  {
-    setImageContainer(flying);
-  }
-
-  void goUp()
-  {
-    pixel_y -= speed;
-  }
-
-  void goDown()
-  {
-    pixel_y += speed;
-  }
-
-  void goRight(int steps)
-  {
-    pixel_x += steps * speed;
-  }
-
-  void goLeft(int steps)
-  {
-    pixel_x -= steps * speed;
-  }
-
-  void goRightUp()
-  {
-    pixel_x += speed;
-    pixel_y -= speed;
-  }
-
-  void goRightDown()
-  {
-    pixel_x += speed;
-    pixel_y += speed;
-  }
-
-  void goLeftUp()
-  {
-    pixel_x -= speed;
-    pixel_y -= speed;
-  }
-
-  void goLeftDown()
-  {
-    pixel_x -= speed;
-    pixel_y += speed;
+    super.update(images.enemy_damage, flying_height, flying);
   }
 }

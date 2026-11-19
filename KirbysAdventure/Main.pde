@@ -39,7 +39,7 @@ void setup()
   lives = new Lives(sky_background.kirby_lives_x, sky_background.kirby_lives_y, 20, images.lives_path);
 
   // Energy Ball:
-  energy_ball = new EnergyBall (600, 200, global.ENERGY_BALL_SPEED);
+  energy_ball = new EnergyBall (600, 200);
   global.game_objects.add(energy_ball);
   enemy_health = new EnemyHealth(sky_background.energy_ball_health_x, sky_background.energy_ball_health_y, 300);
 }
@@ -79,8 +79,8 @@ void firstEnemy()
   drawBackground();
 
   // Hitboxen Kirby und EnergyBall:
-  fill(0, 255, 0);
-  rect(kirby.pixel_x, kirby.pixel_y, global.kirby_size, global.kirby_size);
+  //fill(0, 255, 0);
+  //rect(kirby.pixel_x, kirby.pixel_y, global.kirby_size, global.kirby_size);
   //fill(0, 0,255);
   //rect(energy_ball.pixel_x, energy_ball.pixel_y, global.energy_ball_size, global.energy_ball_size);
 
@@ -155,7 +155,7 @@ void resetKirby()
 void resetEnergyBall()
 {
   // Energy Ball:
-  energy_ball = new EnergyBall (global.energy_ball_start_x, global.energy_ball_start_y, global.ENERGY_BALL_SPEED);
+  energy_ball = new EnergyBall (global.energy_ball_start_x, global.energy_ball_start_y);
   global.game_objects.add(energy_ball);
 
   enemy_health = new EnemyHealth(sky_background.energy_ball_health_x, sky_background.energy_ball_health_y, 300);
