@@ -72,7 +72,8 @@ class Kirby extends Character
       {
         // Wenn noch Healthpunkte vorhanden sind verlieren wir einen
         if (health > 0)
-        {                    
+        {              
+          setImageContainer(images.kirby_damage); // Anstatt hier mit nem Timer versehen, damit es länger ist
           health--;
           kirby_health.setHealthBar(health);
           // Wir laden den Stern mit dem wir kollidiert sind in eine Liste, um keine weitere Kollision

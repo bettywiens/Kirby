@@ -4,12 +4,13 @@ class Images
   // --- ENERGY BALL:
   NormalImage energy_ball_image;
   // --- KIRBY:
+  NormalImage enemy_flying_image;
+  NormalImage kirby_health_bar;
   NormalImage kirby_image;
   NormalImage kirby_flying;
   AnimationImage kirby_shooting;
-  NormalImage kirby_health_bar;
+  AnimationImage kirby_damage;
   AnimationImage flying;
-  NormalImage enemy_flying_image;
   AnimationImage enemy_damage;
 
   NormalImage health_bar_new;
@@ -66,6 +67,7 @@ class Images
     kirby_flying = new NormalImage("kirby/flying.png");
     kirby_shooting = new AnimationImage("kirby/shooting/shooting", 9, 0.8);
     kirby_health_bar = new NormalImage("health/kirby/bar_7.png");
+    kirby_damage = new AnimationImage("kirby/damage/frame", 3, 0.8);
     
     
     enemy_flying_image = new NormalImage(enemy_flying_path + "_1.png");
