@@ -15,6 +15,7 @@ class Images
 
   NormalImage health_bar_new;
   NormalImage enemy_health_bar;
+  
   // --- STAR:
   NormalImage star_image;
 
@@ -34,17 +35,29 @@ class Images
   NormalImage yes;
   NormalImage no;
   NormalImage selector;
+  
+  NormalImage kirby_multiplier;
+
+
+  // stats bar:
+  float health_box_width;
+  float lives_box_width;
 
   String lives_path;
 
   // PFADE:
   // --- ENEMY:
-  String enemy_flying_path;  
+  String enemy_flying_path;
   String energy_ball_burst_path;
   String enemy_star_path;
 
   String stats_bar_path;
+  String health_box_path;
+  String lives_box_path;
   String sky_path;
+  String kirby_name_path;
+  String enemy_name_path;
+  String kirby_multiplier_path;
 
   String kirby_bar_path;
   String kirby_star_path;
@@ -54,9 +67,13 @@ class Images
   String directions_path;
 
   String menu_numbers_path;
+  
 
   Images()
   {
+    health_box_width = width / 2;
+    lives_box_width = width / 3;
+
     enemy_flying_path = "enemy/flying/frame";
 
     energy_ball_image = new NormalImage("enemy/flying/frame_1.png");
@@ -68,7 +85,7 @@ class Images
     kirby_shooting = new AnimationImage("kirby/shooting/shooting", 9, 0.8);
     kirby_health_bar = new NormalImage("health/kirby/bar_7.png");
     kirby_damage = new AnimationImage("kirby/damage/frame", 6, 0.45);
-       
+
     enemy_flying_image = new NormalImage(enemy_flying_path + "_1.png");
     enemy_damage = new AnimationImage("enemy/damage/frame", 4, 2);
 
@@ -85,15 +102,22 @@ class Images
     yes = new NormalImage("menu/yes.png");
     no = new NormalImage("menu/no.png");
     selector = new NormalImage("menu/home/selector.png");
-
-
     
+    kirby_multiplier = new NormalImage("background/kirby_multiplier.png");
+
     energy_ball_burst_path = "star/energy_ball/burst/frame";
     enemy_star_path = "star/energy_ball/purple_star/star";
 
 
     lives_path = "health/numbers/";
     stats_bar_path = "background/stats_bar.png";
+    health_box_path = "background/health_box.png";
+    lives_box_path = "background/lives_box.png";
+    
+    kirby_name_path = "background/kirby_name.png";
+    enemy_name_path = "background/enemy_name.png";
+    kirby_multiplier_path = "background/kirby_multiplier.png";
+
     sky_path = "background/sky.png";
     enemy_bar_path = "health/enemy/bar_";
 

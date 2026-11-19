@@ -65,9 +65,9 @@ class Character extends GameObject
     if (pixel_y <= 0 + character_height)
     {
       pixel_y = 0 + character_height;
-    } else if (pixel_y >= global.lower_border - image_height * global.SCALE)
+    } else if (pixel_y >= global.lower_border - image_height * SCALE)
     {
-      pixel_y = global.lower_border - image_height * global.SCALE;
+      pixel_y = global.lower_border - image_height * SCALE;
     }
   }
 

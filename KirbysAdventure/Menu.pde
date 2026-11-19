@@ -13,11 +13,11 @@ class Menu extends GameObject
   float selector_x = 82;
   float selector_y;
   float center = width/2;
-  float gap = global.SCALE * 30;
-  float small_gap = global.SCALE * 17;
+  float gap = SCALE * 30;
+  float small_gap = SCALE * 17;
   float in_game_menu_x = center - (images.lives.image_width * 1.4);
   float lives_x = in_game_menu_x;
-  float menu_lives_x = lives_x + (images.lives.image_width * global.SCALE) + (gap * 0.5) ;
+  float menu_lives_x = lives_x + (images.lives.image_width * SCALE) + (gap * 0.5) ;
   float in_game_menu_pointer_x = in_game_menu_x - 50;
   float game_over_pointer_x = center - images.continue_image.image_width - images.pointer.image_width - 30;  
   float try_again_lives_x;
@@ -27,6 +27,9 @@ class Menu extends GameObject
   float pointer_y = game_end_y;
   float game_over_continue_x = center - images.continue_image.image_width;
   float game_over_continue_y = height * 0.4;
+  float selector_max_height;
+  float selector_step;
+  
 
   Menu(float pixel_x, float pixel_y, float size)
   {
@@ -34,10 +37,12 @@ class Menu extends GameObject
 
     try_again_x = center - (images.try_again.image_width);
 
-    try_again_lives_x = try_again_x + (images.lives.image_width * global.SCALE) + (small_gap) ;
+    try_again_lives_x = try_again_x + (images.lives.image_width * SCALE) + (small_gap) ;
     no_x = center + images.no.image_width;
     pointer_x  = try_again_x - small_gap;
-    selector_y = 350;
+    selector_y = height / 2 + (height / 12);
+    selector_max_height = height / 2 + (height / 11);
+    selector_step = selector_max_height / 7;
   }
 
   // Screen, wenn man gewonnen hat:
@@ -179,14 +184,14 @@ class Menu extends GameObject
   {
     if (key_handler.down_pressed) // Selector nach unten
     {
-      if (selector_y < 430) {
-        selector_y += 40;
+      if (selector_y < selector_max_height + (selector_step)) {
+        selector_y += selector_step;
       }
     } else if (key_handler.up_pressed) // Selector nach oben
     {
-      if (selector_y > 350)
+      if (selector_y > selector_max_height )
       {
-        selector_y -= 40;
+        selector_y -= selector_step;
       }
     } else if (key_handler.e_pressed) // Spiel schließen
     {

@@ -3,6 +3,7 @@ import java.nio.file.Path;
 
 int size_x = 800;
 int size_y = 600;
+float SCALE = 2;
 
 KeyHandler key_handler;
 Background sky_background;
@@ -20,11 +21,11 @@ void setup()
 {
   size(800, 600);
   windowResize(size_x, size_y);
-
+  checkScreenSize(size_y);
   key_handler = new KeyHandler();
   images = new Images();
   sky_background = new Background();
-  global = new GlobalVariables();
+  global = new GlobalVariables(SCALE);
 
 
   // Menü:
@@ -33,20 +34,20 @@ void setup()
   // Kirby:
   kirby = new Kirby(global.kirby_start_x, global.kirby_start_y, global.KIRBY_SPEED);
   global.game_objects.add(kirby);
-  kirby_health = new KirbyHealth(global.kirby_health_x, global.kirby_health_y, 10); //! size wird hier nicht gebraucht vielleicht auf Klassen beschränken wo es gebraucht wird
+  kirby_health = new KirbyHealth(sky_background.kirby_health_x, sky_background.kirby_health_y, 10); //! size wird hier nicht gebraucht vielleicht auf Klassen beschränken wo es gebraucht wird
   // --- Kirby Leben:
-  lives = new Lives(global.kirby_lives_x, global.kirby_lives_y, 20, images.lives_path);
+  lives = new Lives(sky_background.kirby_lives_x, sky_background.kirby_lives_y, 20, images.lives_path);
 
   // Energy Ball:
   energy_ball = new EnergyBall (600, 200, global.ENERGY_BALL_SPEED);
   global.game_objects.add(energy_ball);
-  enemy_health = new EnemyHealth(global.energy_ball_health_x, global.energy_ball_health_y, 300);
+  enemy_health = new EnemyHealth(sky_background.energy_ball_health_x, sky_background.energy_ball_health_y, 300);
 }
 
 void draw()
-{   
+{
   checkScreenSize(size_y);
-  
+
   if (global.kirby_lives == 0)
   {
     menu.drawGameOver();
@@ -74,7 +75,7 @@ void draw()
 
 void firstEnemy()
 {
-
+  //println(global.SCALE);
   drawBackground();
 
   // Hitboxen Kirby und EnergyBall:
@@ -114,13 +115,13 @@ void checkScreenSize(float size_y)
 {
   if (size_y < 600)
   {
-    global.setScale(1.5);
+    setScale(1.2);
   } else if (size_y < 500)
   {
-    global.setScale(1.4);
+    setScale(1.4);
   } else if (size_y > 600)
   {
-    global.setScale(2.3);
+    setScale(2.3);
   }
 }
 
@@ -138,7 +139,7 @@ void resetGame(boolean resetLives) //
   resetEnergyBall();
 
   // Leben:
-  lives = new Lives(global.kirby_lives_x, global.kirby_lives_y, 20, images.lives_path);
+  lives = new Lives(sky_background.kirby_lives_x, sky_background.kirby_lives_y, 20, images.lives_path);
 
   menu = new Menu(0, 0, 0);
 }
@@ -148,7 +149,7 @@ void resetKirby()
   // Kirby:
   kirby = new Kirby(global.kirby_start_x, global.kirby_start_y, global.KIRBY_SPEED);
   global.game_objects.add(kirby);
-  kirby_health = new KirbyHealth(global.kirby_health_x, global.kirby_health_y, 10); //! size wird hier nicht gebraucht vielleicht auf Klassen beschränken wo es gebraucht wird
+  kirby_health = new KirbyHealth(sky_background.kirby_health_x, sky_background.kirby_health_y, 10); //! size wird hier nicht gebraucht vielleicht auf Klassen beschränken wo es gebraucht wird
 }
 
 void resetEnergyBall()
@@ -157,7 +158,7 @@ void resetEnergyBall()
   energy_ball = new EnergyBall (global.energy_ball_start_x, global.energy_ball_start_y, global.ENERGY_BALL_SPEED);
   global.game_objects.add(energy_ball);
 
-  enemy_health = new EnemyHealth(global.energy_ball_health_x, global.energy_ball_health_y, 300);
+  enemy_health = new EnemyHealth(sky_background.energy_ball_health_x, sky_background.energy_ball_health_y, 300);
   global.energy_ball_damaged = false;
 }
 
@@ -165,6 +166,11 @@ void drawBackground()
 {
   sky_background.drawing();
   sky_background.bewege();
+}
+
+void setScale(float scale)
+{
+  this.SCALE = scale;
 }
 
 void keyPressed()
