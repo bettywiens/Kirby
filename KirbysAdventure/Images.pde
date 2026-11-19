@@ -67,9 +67,8 @@ class Images
     kirby_flying = new NormalImage("kirby/flying.png");
     kirby_shooting = new AnimationImage("kirby/shooting/shooting", 9, 0.8);
     kirby_health_bar = new NormalImage("health/kirby/bar_7.png");
-    kirby_damage = new AnimationImage("kirby/damage/frame", 3, 0.8);
-    
-    
+    kirby_damage = new AnimationImage("kirby/damage/frame", 6, 0.45);
+       
     enemy_flying_image = new NormalImage(enemy_flying_path + "_1.png");
     enemy_damage = new AnimationImage("enemy/damage/frame", 4, 2);
 
@@ -101,7 +100,7 @@ class Images
     kirby_bar_path = "health/kirby/bar_";
     kirby_star_path = "star/kirby/star";
 
-    directions_path = "/Users/bettywiens/Documents/GitHub/Kirby/KirbysAdventure/data/enemy/directions/energy_ball_directions.txt";
+    directions_path = "C:/Users/bwiens/Documents/GitHub/Kirby/KirbysAdventure/data/enemy/directions/energy_ball_directions.txt";
 
     menu_numbers_path = "menu/numbers/";
   }

@@ -4,22 +4,24 @@ class Kirby extends Character
 
   boolean shooting_star = false;
 
-  boolean space_pressed = false;
+  boolean space_pressed = false;    
 
   int health_counter = 0;
+  
+  Timer damage_timer;
 
 
   Kirby(float pixel_x, float pixel_y, float speed)
   {
     super(GameTypes.KIRBY, pixel_x, pixel_y, speed, global.kirby_size, 7);   
     
-
     flying_height = images.kirby_flying.image_height;
 
-    // Animation wenn Kirby einen Stern schießt
+    damage_timer = new Timer(2000); // Timer für 2s
     
 
     setImageContainer(images.kirby_flying);
+    
   }
 
   @Override
@@ -57,6 +59,11 @@ class Kirby extends Character
     checkBorders(flying_height);
 
     checkCollisionWithStar();
+    
+    if (!damage_timer.isFinished())
+    {
+      setImageContainer(images.kirby_damage);
+    }
   }
 
   void checkCollisionWithStar()
@@ -73,7 +80,7 @@ class Kirby extends Character
         // Wenn noch Healthpunkte vorhanden sind verlieren wir einen
         if (health > 0)
         {              
-          setImageContainer(images.kirby_damage); // Anstatt hier mit nem Timer versehen, damit es länger ist
+          damage_timer.start();
           health--;
           kirby_health.setHealthBar(health);
           // Wir laden den Stern mit dem wir kollidiert sind in eine Liste, um keine weitere Kollision

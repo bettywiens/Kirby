@@ -11,7 +11,6 @@ class GlobalVariables
   int SHOOTING_ENEMY_SPEED;
   int ENERGY_BALL_SPEED;
   
-
   
   boolean energy_ball_collided_with_star = false;
   boolean kirby_collided_with_star = false;
